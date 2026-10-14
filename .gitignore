@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Environment files — never commit real values. Only .env.example is tracked.
+.env
+.env.*
+!.env.example
+
+# Build output
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Expo
+.expo/
+expo-env.d.ts
+web-build/
+android/
+ios/
+
+# Turborepo
+.turbo/
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Supabase local state
+supabase/.branches/
+supabase/.temp/
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/

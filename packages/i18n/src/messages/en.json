@@ -1,0 +1,9 @@
+{
+  "app": {
+    "name": "BingeTrail",
+    "tagline": "Track every movie and series you watch in one place."
+  },
+  "home": {
+    "comingSoon": "Coming soon: search, watchlist and episode tracking."
+  }
+}

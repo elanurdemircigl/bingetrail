@@ -1,0 +1,10 @@
+{
+  "$comment": "Changes require SEC approval and a written reason. See docs/security/secrets-policy.md.",
+  "publicEnv": [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "EXPO_PUBLIC_SUPABASE_URL",
+    "EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+  ],
+  "findings": []
+}

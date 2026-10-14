@@ -1,0 +1,10 @@
+pnpm-lock.yaml
+.next/
+.expo/
+.turbo/
+coverage/
+playwright-report/
+test-results/
+packages/db-types/src/database.types.ts
+plan.md
+fazlar/

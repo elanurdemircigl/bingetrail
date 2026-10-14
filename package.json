@@ -1,0 +1,30 @@
+{
+  "name": "bingetrail",
+  "private": true,
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=@bingetrail/web",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck && pnpm run typecheck:root",
+    "typecheck:root": "tsc -p tsconfig.json --noEmit",
+    "test": "turbo run test",
+    "test:e2e": "playwright test",
+    "test:security": "node --test \"tooling/security/*.test.mjs\"",
+    "security:check": "node tooling/security/public-env-check.mjs && node tooling/security/bundle-guard.mjs apps/web/.next/static",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "prettier": "3.9.10",
+    "turbo": "2.11.8",
+    "typescript": "catalog:"
+  }
+}

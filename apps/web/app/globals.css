@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@config '../tailwind.config.mjs';
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-surface text-ink antialiased;
+}

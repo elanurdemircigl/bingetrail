@@ -1,0 +1,28 @@
+title = "BingeTrail gitleaks configuration"
+
+# Keep gitleaks' built-in rules (generic API keys, JWTs, private keys, cloud tokens…)
+# and add BingeTrail-specific ones on top.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "supabase-secret-key"
+description = "Supabase secret API key (sb_secret_...) — server-only, never commit"
+regex = '''sb_secret_[A-Za-z0-9_-]{16,}'''
+keywords = ["sb_secret_"]
+
+[[rules]]
+id = "supabase-publishable-key-in-source"
+description = "Supabase publishable key hard-coded in source — load it from env instead"
+regex = '''sb_publishable_[A-Za-z0-9_-]{16,}'''
+keywords = ["sb_publishable_"]
+
+[[rules]]
+id = "tmdb-api-key-assignment"
+description = "TMDB API key or read token assigned in source — it belongs in a Supabase Edge Function secret"
+regex = '''(?i)tmdb[a-z_]*(?:key|token)\s*[:=]\s*['"]?[A-Za-z0-9._-]{20,}'''
+keywords = ["tmdb"]
+
+[allowlist]
+description = "Lockfiles contain integrity hashes, not secrets"
+paths = ['''pnpm-lock\.yaml''']

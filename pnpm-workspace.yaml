@@ -1,0 +1,31 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm 10 blocks dependency install scripts by default; allow only reviewed ones.
+# unrs-resolver: native resolver used by eslint-config-next (fetches its prebuilt binary).
+onlyBuiltDependencies:
+  - unrs-resolver
+
+# Fix undeclared dependencies under pnpm's isolated node_modules.
+# react-native-css-interop (NativeWind) references this Babel plugin by name in
+# its preset without declaring it, which breaks Metro bundling.
+packageExtensions:
+  react-native-css-interop:
+    dependencies:
+      '@babel/plugin-transform-react-jsx': ^7.25.0
+
+# Shared tool versions. React is intentionally NOT cataloged: web follows
+# Next.js, mobile follows the Expo SDK (see docs/adr/0001-stack.md).
+catalog:
+  '@eslint/js': 9.39.5
+  '@playwright/test': 1.64.0
+  '@supabase/supabase-js': ^2.117.3
+  '@types/node': ^24.19.2
+  eslint: 9.39.5
+  eslint-config-prettier: ^10.1.8
+  globals: ^17.13.0
+  typescript: 6.0.3
+  typescript-eslint: 8.71.2
+  vitest: 5.0.4
+  zod: ^4.6.7

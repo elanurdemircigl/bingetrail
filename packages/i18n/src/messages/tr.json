@@ -1,0 +1,9 @@
+{
+  "app": {
+    "name": "BingeTrail",
+    "tagline": "Film ve dizi yolculuğunu tek yerden takip et."
+  },
+  "home": {
+    "comingSoon": "Yakında: arama, izleme listesi ve bölüm takibi."
+  }
+}
