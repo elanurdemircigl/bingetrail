@@ -1,7 +1,7 @@
 import { tokens } from '@bingetrail/config/tokens';
 
 /** Loaded from app/globals.css via `@config` so web and mobile share one token source. */
-export default {
+const tailwindConfig = {
   theme: {
     extend: {
       colors: tokens.colors,
@@ -9,3 +9,5 @@ export default {
     },
   },
 };
+
+export default tailwindConfig;
