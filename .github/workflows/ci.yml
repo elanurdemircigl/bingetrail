@@ -66,6 +66,44 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  database:
+    name: Database (migrations, pgTAP, advisors, types)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies (Supabase CLI is a pinned devDependency)
+        run: pnpm install --frozen-lockfile
+
+      # Postgres only; the full local stack is not needed for schema checks.
+      - name: Start local Postgres
+        run: pnpm exec supabase db start
+
+      - name: Apply migrations and seed from scratch
+        run: pnpm run db:reset
+
+      - name: Lint SQL functions
+        run: pnpm run db:lint
+
+      - name: pgTAP (schema, RLS isolation, account deletion)
+        run: pnpm run db:test
+
+      - name: Security and performance advisors (fail on WARN or ERROR)
+        run: pnpm run db:advisors
+
+      - name: Generated types match the schema
+        run: |
+          pnpm run db:types
+          git diff --exit-code -- packages/db-types/src/database.types.ts
+
   gitleaks:
     name: Secret scan (gitleaks)
     runs-on: ubuntu-latest

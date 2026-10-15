@@ -2,7 +2,7 @@
 
 Film ve dizi takip uygulaması: web (Next.js) ve mobil (Expo), Supabase backend.
 
-> **Durum: Faz 0 — Monorepo temeli.** Web ana sayfası ve mobil iskelet çalışıyor; henüz özellik yok.
+> **Durum: Faz 1 — Supabase çekirdeği.** Veritabanı şeması, RLS ve hesap silme modeli hazır; web ana sayfası ve mobil iskelet çalışıyor. Kullanıcıya açık özellik henüz yok.
 > Yol haritası: [plan.md](plan.md) · Faz dizini: [fazlar/](fazlar/README.md)
 
 ## Gereksinimler
@@ -11,8 +11,8 @@ Film ve dizi takip uygulaması: web (Next.js) ve mobil (Expo), Supabase backend.
 | ------------------------------ | ------------------------------------------------------------- |
 | Node.js                        | 24 LTS (`.nvmrc`)                                             |
 | pnpm                           | 10.x (`corepack enable` ile `packageManager` alanından gelir) |
-| Docker                         | Yerel Supabase için (Faz 1'den itibaren)                      |
-| Supabase CLI                   | Faz 1'den itibaren                                            |
+| Docker Desktop                 | Yerel Supabase için çalışır durumda olmalı                    |
+| Supabase CLI                   | Ayrı kurulum gerekmez; `supabase` devDependency (`pnpm exec`) |
 | Expo Go veya Android emülatörü | İsteğe bağlı, mobil iskeleti görmek için                      |
 
 ## Kurulum
@@ -41,6 +41,13 @@ cp apps/mobile/.env.example apps/mobile/.env.local  # Faz 6'ya kadar boş kalabi
 | `pnpm exec playwright install chromium`  | E2E tarayıcısını indirir (bir kez)                                       |
 | `pnpm run test:e2e`                      | Playwright smoke (önce web build)                                        |
 | `pnpm run format` / `format:check`       | Prettier                                                                 |
+| `pnpm db:start` / `pnpm db:stop`         | Yerel Supabase'i başlatır ve durdurur (Docker gerekir)                   |
+| `pnpm db:reset`                          | Yerel veritabanını migration'lar + sahte seed ile sıfırdan kurar         |
+| `pnpm db:test`                           | pgTAP: şema, RLS izolasyonu, hesap silme                                 |
+| `pnpm db:lint` / `pnpm db:advisors`      | SQL fonksiyon denetimi / Supabase güvenlik + performans advisor'ları     |
+| `pnpm db:types`                          | `packages/db-types` tiplerini şemadan yeniden üretir                     |
+
+`pnpm db:start` çıktısı yerel anahtarları ekrana yazar. Bunlar yalnızca senin makinendeki geliştirme ortamına aittir; yine de bir yere yapıştırma. Veri modeli: [docs/data-model.md](docs/data-model.md).
 
 > **Not:** `pnpm turbo run <görev> --filter=...` biçimini kullanma. pnpm `--filter`'ı kendi seçeneği olarak yorumluyor ve komut takılıyor (Windows'ta doğrulandı). Filtreli Turbo çalıştırmaları için `build:web` gibi kök script'leri kullan.
 
@@ -50,6 +57,7 @@ cp apps/mobile/.env.example apps/mobile/.env.local  # Faz 6'ya kadar boş kalabi
 apps/web        Next.js App Router (web)
 apps/mobile     Expo + Expo Router (Faz 0'da yalnızca iskelet)
 packages/       shared · api-client · i18n · db-types · config
+supabase/       migration'lar · pgTAP testleri · seed · config.toml
 tooling/        güvenlik tarayıcıları
 e2e/            Playwright
 docs/           ADR, mimari, güvenlik
@@ -61,7 +69,7 @@ Ayrıntılar: [docs/architecture.md](docs/architecture.md) · Teknoloji kararlar
 
 **Git, commit, push ve deploy işlemlerini yalnızca depo sahibi yapar.** Otomasyon ajanları dosya üretir ve commit mesajı önerir, Git komutu çalıştırmaz.
 
-> ⚠️ **Üst Git deposu uyarısı:** Bu klasör `C:\Users\elqnu` altında. O dizin de bir Git deposu ve içinde `.ssh/` gibi hassas dosyalar var. BingeTrail **bağımsız bir depo** olmalı. İlk commit'ten önce `bingetrail` klasörünün içinde `git init -b main` çalıştırılmalı ve `git rev-parse --show-toplevel` komutunun `.../bingetrail` döndürdüğü doğrulanmalı.
+> ⚠️ **Üst Git deposu uyarısı:** Bu klasör `C:\Users\elqnu` altında ve o dizin de bir Git deposu (içinde `.ssh/` gibi hassas dosyalar var). BingeTrail kendi bağımsız deposudur. Git komutlarını her zaman `bingetrail` klasörünün içinde çalıştır; `git rev-parse --show-toplevel` `.../bingetrail` döndürmeli.
 
 ## Lisans ve atıf
 

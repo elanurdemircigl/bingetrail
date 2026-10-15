@@ -4,7 +4,9 @@ packages:
 
 # pnpm 10 blocks dependency install scripts by default; allow only reviewed ones.
 # unrs-resolver: native resolver used by eslint-config-next (fetches its prebuilt binary).
+# supabase: the Supabase CLI npm package downloads its platform binary on install.
 onlyBuiltDependencies:
+  - supabase
   - unrs-resolver
 
 # Fix undeclared dependencies under pnpm's isolated node_modules.

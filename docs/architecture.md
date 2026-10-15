@@ -33,13 +33,13 @@ Supabase: PostgreSQL + RLS · Auth · Storage · Realtime · Edge Functions (tmd
 
 Paylaşılan paketlerdeki yasaklar ESLint (`no-restricted-imports`) ile zorunlu tutulur.
 
-## Faz 0'daki durum
+## Güncel durum (Faz 1)
 
-| Bileşen            | Durum                                                                          |
-| ------------------ | ------------------------------------------------------------------------------ |
-| `apps/web`         | `/` sayfası (TR), temel güvenlik header'ları, TMDB görsel izni                 |
-| `apps/mobile`      | Tek ekranlı Expo Router iskeleti, NativeWind                                   |
-| `packages/*`       | İskeletler ve smoke testleri                                                   |
-| `supabase/`        | Henüz yok (Faz 1)                                                              |
-| `tooling/security` | bundle-guard, public-env-check                                                 |
-| CI                 | lint · typecheck · test · web build · güvenlik taraması · E2E smoke · gitleaks |
+| Bileşen            | Durum                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `apps/web`         | `/` sayfası (TR), temel güvenlik header'ları, TMDB görsel izni                                                           |
+| `apps/mobile`      | Tek ekranlı Expo Router iskeleti, NativeWind                                                                             |
+| `packages/*`       | İskeletler ve smoke testleri                                                                                             |
+| `supabase/`        | Faz 1: şema, RLS, hesap silme modeli, avatars bucket, pgTAP ([veri modeli](data-model.md))                               |
+| `tooling/security` | bundle-guard, public-env-check                                                                                           |
+| CI                 | lint · typecheck · test · web build · güvenlik taraması · E2E smoke · gitleaks · veritabanı (pgTAP, advisors, tip uyumu) |

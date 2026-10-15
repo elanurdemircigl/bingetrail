@@ -17,6 +17,13 @@
     "test:e2e": "playwright test",
     "test:security": "node --test \"tooling/security/*.test.mjs\"",
     "security:check": "node tooling/security/public-env-check.mjs && node tooling/security/bundle-guard.mjs apps/web/.next/static",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:test": "supabase test db",
+    "db:lint": "supabase db lint --local --schema public --fail-on error",
+    "db:advisors": "supabase db advisors --local --type all --level info --fail-on warn",
+    "db:types": "supabase gen types typescript --local --schema public > packages/db-types/src/database.types.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -24,6 +31,7 @@
     "@playwright/test": "catalog:",
     "@types/node": "catalog:",
     "prettier": "3.9.10",
+    "supabase": "2.121.0",
     "turbo": "2.11.8",
     "typescript": "catalog:"
   }
