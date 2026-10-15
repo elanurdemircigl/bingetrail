@@ -79,7 +79,7 @@ update public.watchlist_items set notes = 'tampered' where user_id = 'bbbbbbbb-b
 delete from public.watchlist_items where user_id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 
 select lives_ok(
-  $$ update public.watchlist_items set status = 'watching', rating = 8 $$,
+  $$ update public.watchlist_items set status = 'watching', started_at = now(), rating = 8 $$,
   'A can update status and rating on their own rows'
 );
 

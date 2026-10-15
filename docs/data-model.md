@@ -35,9 +35,33 @@ erDiagram
 | `watchlist_items`               | Liste, durum, puan, not                           | Yalnızca sahibi     | Sahibi. `user_id`, `title_id` ve `created_at` değiştirilemez         |
 | `episode_progress`              | İzlenen bölümler                                  | Yalnızca sahibi     | Sahibi; yalnızca ekleme ve silme (güncelleme yok)                    |
 | `rate_limits`                   | Edge Function istek sayaçları                     | —                   | Yalnızca service role                                                |
-| `account_deletion_log`          | Kişisel veri içermeyen silme kaydı                | —                   | Yalnızca service role (`delete-account`, Faz 4)                      |
+| `account_deletion_log`          | Kişisel veri içermeyen silme kaydı                | —                   | Yalnızca service role (`delete-account`)                             |
 
 `anon` rolünün hiçbir tabloya erişimi yok. Bütün tablolarda RLS açık. Yetkiler önce tamamen kaldırılıyor, sonra yalnızca gereken sütunlar için tek tek veriliyor.
+
+## Faz 3 eklemeleri
+
+| Nesne                                              | Amaç                                                                    | Erişim                                   |
+| -------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------- |
+| `maintenance_reports`                              | Zamanlanmış bakım işlerinin çıktısı                                     | Yalnızca service role                    |
+| `rate_limit_hit(user, bucket, window, max)`        | Sabit pencereli istek sayacı (`tmdb`: 60/dk)                            | Yalnızca service role                    |
+| `catalog_cache_stats()` / `catalog_cache_report()` | Önbellek istatistiği / haftalık rapor                                   | Yalnızca cron ve service role            |
+| `catalog_cache_cleanup(older_than, dry_run)`       | Takip edilmeyen eski başlıkları siler (≥ 30 gün)                        | Yalnızca service role; **cron yok** (K7) |
+| `purge_rate_limits()`                              | 1 günden eski sayaçları siler                                           | Günlük cron                              |
+| `profiles_avatar_path_owner` (CHECK)               | `avatar_path` yalnızca NULL ya da `<kendi id>/<tek dosya adı>` olabilir | Bütün yazıcılar (superuser dahil)        |
+
+## Faz 4 eklemeleri
+
+Migration `20261015140000_watchlist_consistency.sql` (ileri yönlü; eski migration'lar değişmedi):
+
+| Kural                                                             |
+| ----------------------------------------------------------------- |
+| `completed_at` yalnızca `status = 'completed'` iken dolu olabilir |
+| `watching` ve `completed` için `started_at` zorunlu               |
+| `completed_at`, `started_at`'tan önce olamaz                      |
+| İndeks `(user_id, created_at desc)`: "eklenme tarihi" sıralaması  |
+
+Aynı kurallar istemcide `applyStatusChange` (`packages/shared/src/watchlist.ts`) ile uygulanır: `planned` iki tarihi de temizler, `watching`/`completed` var olan başlangıç tarihini korur, `paused`/`dropped` başlangıcı korur ve bitişi temizler. pgTAP: `03_watchlist_consistency.test.sql`.
 
 ## Önemli tasarım kararları
 

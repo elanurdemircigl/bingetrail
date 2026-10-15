@@ -8,3 +8,4 @@ test-results/
 packages/db-types/src/database.types.ts
 plan.md
 fazlar/
+supabase/functions/_shared/contracts/

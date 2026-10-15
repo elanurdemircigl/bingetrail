@@ -1,4 +1,6 @@
 export { WATCH_STATUSES, watchStatusSchema, type WatchStatus } from './watch-status';
+export * from './contracts/catalog';
+export * from './contracts/account';
 export {
   AUTH_ERROR_CODES,
   PASSWORD_MAX_LENGTH,
@@ -18,3 +20,25 @@ export {
   type SignUpInput,
   type ValidationCode,
 } from './auth';
+export {
+  NOTES_MAX_LENGTH,
+  RATING_MAX,
+  RATING_MIN,
+  WATCHLIST_ERROR_CODES,
+  WATCHLIST_SORTS,
+  addToWatchlistSchema,
+  applyStatusChange,
+  notesSchema,
+  parseWatchlistFilters,
+  ratingSchema,
+  removeFromWatchlistSchema,
+  updateWatchlistDetailsSchema,
+  updateWatchlistStatusSchema,
+  type AddToWatchlistInput,
+  type StatusDates,
+  type UpdateWatchlistDetailsInput,
+  type WatchlistErrorCode,
+  type WatchlistSort,
+  type WatchlistFilters,
+} from './watchlist';
+export { deleteAccountFormSchema, type DeleteAccountFormInput } from './account';

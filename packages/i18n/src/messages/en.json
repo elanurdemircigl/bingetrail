@@ -4,7 +4,7 @@
     "tagline": "Track every movie and series you watch in one place."
   },
   "home": {
-    "comingSoon": "Coming soon: search, watchlist and episode tracking."
+    "comingSoon": "Coming soon: episode tracking and the release calendar."
   },
   "languages": {
     "label": "Language",
@@ -78,7 +78,10 @@
     "passwordTooLong": "Password is too long.",
     "passwordNeedsLetter": "Password must contain at least one letter.",
     "passwordNeedsDigit": "Password must contain at least one digit.",
-    "passwordsDontMatch": "Passwords do not match."
+    "passwordsDontMatch": "Passwords do not match.",
+    "ratingRange": "Rating must be between 1 and 10.",
+    "notesTooLong": "Notes can be at most 5000 characters.",
+    "confirmRequired": "Tick the box to confirm."
   },
   "errors": {
     "invalidCredentials": "Incorrect email or password.",
@@ -96,12 +99,10 @@
       "body": "Series you are watching will show up here."
     },
     "search": {
-      "title": "Search",
-      "body": "Movie and series search is coming soon."
+      "title": "Search"
     },
     "list": {
-      "title": "My list",
-      "body": "Your watchlist is coming soon."
+      "title": "My list"
     },
     "calendar": {
       "title": "Calendar",
@@ -119,5 +120,142 @@
     "languageHelp": "The interface opens in this language; your choice is saved across devices.",
     "save": "Save",
     "saving": "Saving…"
+  },
+  "catalog": {
+    "search": {
+      "label": "Search movies or series",
+      "placeholder": "e.g. the name of a movie or series",
+      "submit": "Search",
+      "searching": "Searching…",
+      "hint": "Type the name of a movie or series to search.",
+      "resultCount": "{count, plural, one {# result} other {# results}}",
+      "noResults": "No results for “{query}”.",
+      "previous": "Previous page",
+      "next": "Next page",
+      "pageOf": "Page {page} of {total}"
+    },
+    "mediaType": {
+      "movie": "Movie",
+      "tv": "Series"
+    },
+    "noPoster": "No poster",
+    "originalTitle": "Original title: {title}",
+    "releaseDate": "Release date",
+    "firstAirDate": "First aired",
+    "status": "Status",
+    "overviewMissing": "No overview available in this language.",
+    "seasons": "Seasons",
+    "episodeCount": "{count, plural, one {# episode} other {# episodes}}",
+    "episodes": "Episodes",
+    "episodeNumber": "Episode {number}",
+    "runtime": "{minutes} min",
+    "dateUnknown": "Date not announced",
+    "backToTitle": "Back to series",
+    "statusLabels": {
+      "released": "Released",
+      "ended": "Ended",
+      "returning": "Returning series",
+      "canceled": "Canceled",
+      "inProduction": "In production",
+      "planned": "Planned",
+      "postProduction": "In post-production",
+      "rumored": "Announced",
+      "pilot": "Pilot"
+    },
+    "errors": {
+      "rate_limited": "Too many requests. Try again in a minute.",
+      "upstream_unavailable": "The movie database is unavailable right now. Please try again shortly.",
+      "internal": "The catalog could not be loaded. Please try again.",
+      "invalid_request": "Invalid request.",
+      "unauthorized": "Your session has ended. Please sign in again.",
+      "not_found": "This title could not be found."
+    },
+    "attribution": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+    "attributionLink": "TMDB"
+  },
+  "watchlist": {
+    "heading": "My list",
+    "statusLabel": "Status",
+    "status": {
+      "planned": "Plan to watch",
+      "watching": "Watching",
+      "completed": "Completed",
+      "paused": "On hold",
+      "dropped": "Dropped"
+    },
+    "add": "Add to my list",
+    "adding": "Adding…",
+    "notInList": "This title is not in your list yet.",
+    "rating": "Your rating",
+    "ratingNone": "No rating",
+    "ratingValue": "{rating}/10",
+    "notes": "Personal notes",
+    "notesHint": "Only you can see your notes.",
+    "notesCount": "{count} / {max}",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "remove": "Remove from list",
+    "removeConfirm": "Remove “{title}” from your list? Its status, rating and notes will be deleted.",
+    "removeYes": "Yes, remove",
+    "removeCancel": "Cancel",
+    "removing": "Removing…",
+    "errors": {
+      "already_exists": "This title is already in your list.",
+      "not_found": "This entry no longer exists. Refresh the page.",
+      "unexpected": "Something went wrong. Please try again."
+    }
+  },
+  "list": {
+    "filterLabel": "Filter by status",
+    "all": "All",
+    "sortLabel": "Sort by",
+    "sort": {
+      "recent": "Recent activity",
+      "added": "Date added",
+      "title": "Title (A–Z)",
+      "rating": "Rating"
+    },
+    "apply": "Apply",
+    "count": "{count, plural, one {# title} other {# titles}}",
+    "empty": "Your list is empty. Find something to watch and add it here.",
+    "emptyFiltered": "No titles with this status.",
+    "searchLink": "Go to search",
+    "ratingShort": "Rating: {rating}/10",
+    "edit": "Edit"
+  },
+  "account": {
+    "dangerTitle": "Delete account",
+    "dangerBody": "Permanently delete your account and all of your personal data.",
+    "deleteLink": "Delete my account…",
+    "delete": {
+      "title": "Delete your account",
+      "irreversible": "This cannot be undone. Deletion happens immediately: there is no waiting period and the account cannot be recovered.",
+      "willDelete": "The following will be permanently deleted:",
+      "items": {
+        "account": "Your account and sign-in details",
+        "profile": "Your profile and language preference",
+        "list": "Your list, statuses, ratings and notes",
+        "progress": "Your episode progress",
+        "avatar": "Your profile picture"
+      },
+      "keeps": "Shared catalog information about movies and series (from TMDB) is not personal data and is not affected.",
+      "password": "Your password",
+      "passwordHint": "Enter your password to confirm it is you.",
+      "confirm": "I understand that my account and data will be permanently deleted.",
+      "submit": "Permanently delete my account",
+      "submitting": "Deleting…",
+      "cancel": "Cancel, keep my account",
+      "errors": {
+        "reauth_failed": "Incorrect password.",
+        "rate_limited": "Too many attempts. Please try again in an hour.",
+        "unexpected": "The account could not be deleted. Please try again."
+      }
+    },
+    "deleted": {
+      "title": "Your account was deleted",
+      "body": "Your account and personal data have been permanently deleted. Thank you for using BingeTrail.",
+      "home": "Back to the start page"
+    }
   }
 }

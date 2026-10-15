@@ -1,6 +1,6 @@
 # Mimari
 
-> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 2.
+> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 4.
 
 ## Bileşenler
 
@@ -34,15 +34,15 @@ Supabase: PostgreSQL + RLS · Auth · Storage · Realtime · Edge Functions (tmd
 
 Paylaşılan paketlerdeki yasaklar ESLint (`no-restricted-imports`) ile zorunlu tutulur.
 
-## Güncel durum (Faz 2)
+## Güncel durum (Faz 4)
 
-| Bileşen               | Durum                                                                                                                                                                        |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apps/web`            | next-intl (`/tr`, `/en`), auth akışları (Server Actions + `/auth/confirm`), `proxy.ts` erişim kuralları, uygulama kabuğu ([auth](auth.md), [ADR-0002](adr/0002-web-auth.md)) |
-| `apps/mobile`         | Tek ekranlı Expo Router iskeleti, NativeWind (özellikler Faz 6)                                                                                                              |
-| `packages/shared`     | Auth Zod şemaları, doğrulama ve hata kodları                                                                                                                                 |
-| `packages/api-client` | `queryKeys`, `ProfileDTO`, `getProfile`, `updateProfileLocale`                                                                                                               |
-| `packages/i18n`       | TR/EN mesajları (auth, nav, doğrulama, hatalar, profil)                                                                                                                      |
-| `supabase/`           | Şema, RLS, hesap silme modeli, avatars bucket, pgTAP ([veri modeli](data-model.md)); auth ayarları ve TR/EN e-posta şablonları                                               |
-| `tooling/`            | `security/`: bundle-guard, public-env-check · `scripts/`: yerel Supabase public env aktarıcı                                                                                 |
-| CI                    | quality (lint · typecheck · birim) · e2e (web build · güvenlik taraması · Playwright, yerel Supabase ile) · database (pgTAP · advisors · tip uyumu) · gitleaks               |
+| Bileşen               | Durum                                                                                                                                                                                                                                                                                                                  |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web`            | next-intl, auth (recovery işaretli parola sıfırlama), arama / başlık / sezon sayfaları, TMDB atfı, izleme listesi (Server Actions + `useOptimistic`, filtreler URL'de), iki adımlı hesap silme ([auth](auth.md), [ADR-0002](adr/0002-web-auth.md), [ADR-0003](adr/0003-catalog.md), [ADR-0004](adr/0004-watchlist.md)) |
+| `apps/mobile`         | Tek ekranlı Expo Router iskeleti, NativeWind (özellikler Faz 6)                                                                                                                                                                                                                                                        |
+| `packages/shared`     | Auth Zod şemaları, hata kodları, katalog ve hesap sözleşmeleri (`contracts/`, Edge Function'lara senkronlanır), izleme listesi kuralları (`applyStatusChange`, puan/not şemaları), hesap silme formu                                                                                                                   |
+| `packages/api-client` | `queryKeys` (profil, katalog, liste), profil, katalog, izleme listesi (`getWatchlist`, `addToWatchlist`, …) ve `deleteAccount`                                                                                                                                                                                         |
+| `packages/i18n`       | TR/EN mesajları (auth, nav, doğrulama, hatalar, profil, katalog, liste, hesap)                                                                                                                                                                                                                                         |
+| `supabase/`           | Şema + RLS, hesap silme modeli, avatar yolu kısıtı, hız sınırı ve bakım fonksiyonları, `pg_cron` (rapor işleri), liste tutarlılık kısıtları, `tmdb` ve `delete-account` Edge Function'ları ([tmdb](edge-functions/tmdb.md), [delete-account](edge-functions/delete-account.md), [saklama](data-retention.md))          |
+| `tooling/`            | `security/`: bundle-guard, public-env-check · `scripts/`: yerel Supabase public env aktarıcı                                                                                                                                                                                                                           |
+| CI                    | quality (lint · typecheck · birim · sözleşme senkronu · Deno) · e2e (build · güvenlik · Playwright + Edge Function + sahte TMDB) · database (pgTAP · advisors · tip uyumu) · gitleaks                                                                                                                                  |

@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@bingetrail/db-types": "workspace:*",
-    "@bingetrail/i18n": "workspace:*"
+    "@bingetrail/i18n": "workspace:*",
+    "@bingetrail/shared": "workspace:*",
+    "zod": "catalog:"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.0.0"

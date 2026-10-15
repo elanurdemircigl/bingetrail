@@ -5,7 +5,14 @@ import { routing } from '@/i18n/routing';
 type Locale = (typeof routing.locales)[number];
 
 /** Pages that require a signed-in user. */
-export const PROTECTED_SECTIONS = ['/home', '/search', '/list', '/calendar', '/profile'] as const;
+export const PROTECTED_SECTIONS = [
+  '/home',
+  '/search',
+  '/title',
+  '/list',
+  '/calendar',
+  '/profile',
+] as const;
 /** Pages that only make sense for guests; signed-in users are sent to /home. */
 export const GUEST_ONLY_SECTIONS = ['/login', '/signup', '/forgot-password'] as const;
 /** Requires a (recovery) session; without one the user must request a new link. */

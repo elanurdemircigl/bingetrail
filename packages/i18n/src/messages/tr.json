@@ -4,7 +4,7 @@
     "tagline": "Film ve dizi yolculuğunu tek yerden takip et."
   },
   "home": {
-    "comingSoon": "Yakında: arama, izleme listesi ve bölüm takibi."
+    "comingSoon": "Yakında: bölüm takibi ve yayın takvimi."
   },
   "languages": {
     "label": "Dil",
@@ -78,7 +78,10 @@
     "passwordTooLong": "Parola çok uzun.",
     "passwordNeedsLetter": "Parola en az bir harf içermeli.",
     "passwordNeedsDigit": "Parola en az bir rakam içermeli.",
-    "passwordsDontMatch": "Parolalar eşleşmiyor."
+    "passwordsDontMatch": "Parolalar eşleşmiyor.",
+    "ratingRange": "Puan 1 ile 10 arasında olmalı.",
+    "notesTooLong": "Not en fazla 5000 karakter olabilir.",
+    "confirmRequired": "Onaylamak için kutuyu işaretle."
   },
   "errors": {
     "invalidCredentials": "E-posta veya parola hatalı.",
@@ -96,12 +99,10 @@
       "body": "Devam ettiğin diziler burada görünecek."
     },
     "search": {
-      "title": "Ara",
-      "body": "Film ve dizi araması yakında burada."
+      "title": "Ara"
     },
     "list": {
-      "title": "Listem",
-      "body": "İzleme listen yakında burada."
+      "title": "Listem"
     },
     "calendar": {
       "title": "Takvim",
@@ -119,5 +120,142 @@
     "languageHelp": "Arayüz bu dilde açılır; tercihin tüm cihazlarında saklanır.",
     "save": "Kaydet",
     "saving": "Kaydediliyor…"
+  },
+  "catalog": {
+    "search": {
+      "label": "Film veya dizi ara",
+      "placeholder": "Örn. bir film ya da dizi adı",
+      "submit": "Ara",
+      "searching": "Aranıyor…",
+      "hint": "Aramak için bir film ya da dizi adı yaz.",
+      "resultCount": "{count, plural, one {# sonuç} other {# sonuç}}",
+      "noResults": "“{query}” için sonuç bulunamadı.",
+      "previous": "Önceki sayfa",
+      "next": "Sonraki sayfa",
+      "pageOf": "Sayfa {page} / {total}"
+    },
+    "mediaType": {
+      "movie": "Film",
+      "tv": "Dizi"
+    },
+    "noPoster": "Afiş yok",
+    "originalTitle": "Özgün adı: {title}",
+    "releaseDate": "Yayın tarihi",
+    "firstAirDate": "İlk yayın",
+    "status": "Durum",
+    "overviewMissing": "Bu dil için açıklama yok.",
+    "seasons": "Sezonlar",
+    "episodeCount": "{count, plural, one {# bölüm} other {# bölüm}}",
+    "episodes": "Bölümler",
+    "episodeNumber": "{number}. bölüm",
+    "runtime": "{minutes} dk",
+    "dateUnknown": "Tarih belli değil",
+    "backToTitle": "Diziye dön",
+    "statusLabels": {
+      "released": "Yayınlandı",
+      "ended": "Bitti",
+      "returning": "Devam ediyor",
+      "canceled": "İptal edildi",
+      "inProduction": "Yapımda",
+      "planned": "Planlandı",
+      "postProduction": "Post prodüksiyonda",
+      "rumored": "Duyuruldu",
+      "pilot": "Pilot"
+    },
+    "errors": {
+      "rate_limited": "Çok fazla istek gönderildi. Bir dakika sonra tekrar dene.",
+      "upstream_unavailable": "Film veritabanına şu an ulaşılamıyor. Biraz sonra tekrar dene.",
+      "internal": "Katalog yüklenemedi. Lütfen tekrar dene.",
+      "invalid_request": "Geçersiz istek.",
+      "unauthorized": "Oturumun sona ermiş. Tekrar giriş yap.",
+      "not_found": "Bu içerik bulunamadı."
+    },
+    "attribution": "Bu ürün TMDB API’sini kullanır ancak TMDB tarafından onaylanmış veya sertifikalandırılmış değildir.",
+    "attributionLink": "TMDB"
+  },
+  "watchlist": {
+    "heading": "Listem",
+    "statusLabel": "Durum",
+    "status": {
+      "planned": "İzlenecek",
+      "watching": "İzleniyor",
+      "completed": "Tamamlandı",
+      "paused": "Ara verildi",
+      "dropped": "Bırakıldı"
+    },
+    "add": "Listeme ekle",
+    "adding": "Ekleniyor…",
+    "notInList": "Bu başlık henüz listende değil.",
+    "rating": "Puanın",
+    "ratingNone": "Puan yok",
+    "ratingValue": "{rating}/10",
+    "notes": "Kişisel notlar",
+    "notesHint": "Notlarını yalnızca sen görebilirsin.",
+    "notesCount": "{count} / {max}",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "saved": "Kaydedildi.",
+    "remove": "Listeden çıkar",
+    "removeConfirm": "“{title}” listenden çıkarılsın mı? Durumu, puanı ve notları silinecek.",
+    "removeYes": "Evet, çıkar",
+    "removeCancel": "Vazgeç",
+    "removing": "Çıkarılıyor…",
+    "errors": {
+      "already_exists": "Bu başlık zaten listende.",
+      "not_found": "Bu kayıt artık yok. Sayfayı yenile.",
+      "unexpected": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    }
+  },
+  "list": {
+    "filterLabel": "Duruma göre filtrele",
+    "all": "Tümü",
+    "sortLabel": "Sırala",
+    "sort": {
+      "recent": "Son etkinlik",
+      "added": "Eklenme tarihi",
+      "title": "Ad (A–Z)",
+      "rating": "Puan"
+    },
+    "apply": "Uygula",
+    "count": "{count, plural, one {# başlık} other {# başlık}}",
+    "empty": "Listen boş. İzleyecek bir şey bul ve buraya ekle.",
+    "emptyFiltered": "Bu durumda başlık yok.",
+    "searchLink": "Aramaya git",
+    "ratingShort": "Puan: {rating}/10",
+    "edit": "Düzenle"
+  },
+  "account": {
+    "dangerTitle": "Hesabı sil",
+    "dangerBody": "Hesabını ve tüm kişisel verilerini kalıcı olarak sil.",
+    "deleteLink": "Hesabımı sil…",
+    "delete": {
+      "title": "Hesabını sil",
+      "irreversible": "Bu işlem geri alınamaz. Silme hemen gerçekleşir: bekleme süresi yoktur ve hesap geri getirilemez.",
+      "willDelete": "Aşağıdakiler kalıcı olarak silinecek:",
+      "items": {
+        "account": "Hesabın ve giriş bilgilerin",
+        "profile": "Profilin ve dil tercihin",
+        "list": "Listen, durumlar, puanlar ve notlar",
+        "progress": "Bölüm ilerlemen",
+        "avatar": "Profil fotoğrafın"
+      },
+      "keeps": "Filmler ve diziler hakkındaki ortak katalog bilgisi (TMDB’den) kişisel veri değildir ve etkilenmez.",
+      "password": "Parolan",
+      "passwordHint": "Sen olduğunu doğrulamak için parolanı gir.",
+      "confirm": "Hesabımın ve verilerimin kalıcı olarak silineceğini anlıyorum.",
+      "submit": "Hesabımı kalıcı olarak sil",
+      "submitting": "Siliniyor…",
+      "cancel": "Vazgeç, hesabımı koru",
+      "errors": {
+        "reauth_failed": "Parola hatalı.",
+        "rate_limited": "Çok fazla deneme yapıldı. Bir saat sonra tekrar dene.",
+        "unexpected": "Hesap silinemedi. Lütfen tekrar dene."
+      }
+    },
+    "deleted": {
+      "title": "Hesabın silindi",
+      "body": "Hesabın ve kişisel verilerin kalıcı olarak silindi. BingeTrail’i kullandığın için teşekkürler.",
+      "home": "Başlangıç sayfasına dön"
+    }
   }
 }

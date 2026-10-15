@@ -15,7 +15,8 @@ import {
   type AuthErrorCode,
 } from '@bingetrail/shared';
 
-import { getSessionUser } from '@/lib/auth/session';
+import { RECOVERY_COOKIE } from '@/lib/auth/recovery';
+import { getSessionUser, isRecoverySession } from '@/lib/auth/session';
 import { safeRedirectPath } from '@/lib/safe-redirect';
 import { createClient } from '@/lib/supabase/server';
 
@@ -93,10 +94,16 @@ export async function resetPasswordAction(input: unknown): Promise<ActionResult>
   const parsed = resetPasswordSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: 'unexpected' };
 
+  // Server Actions are callable directly: re-check the recovery marker here too.
+  if (!(await isRecoverySession(await getSessionUser())))
+    return { ok: false, error: 'linkInvalid' };
+
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
   if (error) return { ok: false, error: toAuthErrorCode(error, 'unexpected') };
 
+  // Single use: the marker is gone once the password is changed.
+  (await cookies()).delete(RECOVERY_COOKIE);
   redirect(`/${await currentLocale()}/home?passwordUpdated=1`);
 }
 
@@ -104,6 +111,7 @@ export async function signOutAction(): Promise<void> {
   const supabase = await createClient();
   // Local scope: ends this device's session without signing out other devices.
   await supabase.auth.signOut({ scope: 'local' });
+  (await cookies()).delete(RECOVERY_COOKIE);
   redirect(`/${await currentLocale()}/login`);
 }
 

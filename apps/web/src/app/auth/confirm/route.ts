@@ -1,8 +1,15 @@
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import type { NextRequest } from 'next/server';
 
 import { routing } from '@/i18n/routing';
+import {
+  createRecoveryMarker,
+  hasRecoverySecret,
+  RECOVERY_COOKIE,
+  recoveryCookieOptions,
+} from '@/lib/auth/recovery';
 import { createClient } from '@/lib/supabase/server';
 
 const ALLOWED_TYPES = ['email', 'recovery'] as const;
@@ -28,7 +35,22 @@ export async function GET(request: NextRequest) {
   if (tokenHash && isConfirmType(type)) {
     const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
-    if (!error) redirect(type === 'recovery' ? `/${locale}/reset-password` : `/${locale}/home`);
+    if (!error && type === 'email') redirect(`/${locale}/home`);
+    if (!error && type === 'recovery') {
+      // Mark THIS session as a recovery session (HttpOnly, signed, 15 min).
+      const { data } = await supabase.auth.getClaims();
+      const sessionId = data?.claims.session_id;
+      const marker =
+        data && typeof sessionId === 'string'
+          ? createRecoveryMarker({ userId: data.claims.sub, sessionId })
+          : null;
+      if (marker) {
+        (await cookies()).set(RECOVERY_COOKIE, marker, recoveryCookieOptions());
+        redirect(`/${locale}/reset-password`);
+      }
+      if (!hasRecoverySecret())
+        console.error('AUTH_COOKIE_SECRET is missing or too short; password reset is disabled.');
+    }
   }
 
   redirect(`/${locale}/login?error=linkInvalid`);

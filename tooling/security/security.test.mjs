@@ -2,7 +2,7 @@
 // no secret-shaped literal is ever committed (keeps gitleaks clean).
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, describe, it } from 'node:test';
@@ -160,6 +160,20 @@ describe('public-env-check', () => {
     assert.deepEqual(
       findings.map((f) => f.rule),
       ['secret-in-public-env'],
+    );
+  });
+
+  it('also checks Edge Function example env files', () => {
+    const root = mkdtempSync(join(tmpdir(), 'public-env-'));
+    tempDirs.push(root);
+    mkdirSync(join(root, 'supabase', 'functions'), { recursive: true });
+    writeFileSync(
+      join(root, 'supabase', 'functions', '.env.example'),
+      'TMDB_API_READ_ACCESS_TOKEN=leaked\n',
+    );
+    assert.deepEqual(
+      runChecks(root, {}).map((f) => f.rule),
+      ['env-example-has-value'],
     );
   });
 

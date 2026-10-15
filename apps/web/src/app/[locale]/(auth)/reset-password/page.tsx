@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { ResetPasswordForm } from '@/components/auth/reset-password-form';
 import { redirect } from '@/i18n/navigation';
 import { resolveLocale } from '@/i18n/page';
-import { getSessionUser } from '@/lib/auth/session';
+import { getSessionUser, isRecoverySession } from '@/lib/auth/session';
 
 export async function generateMetadata({
   params,
@@ -16,9 +16,11 @@ export async function generateMetadata({
 
 export default async function ResetPasswordPage({ params }: PageProps<'/[locale]/reset-password'>) {
   const locale = await resolveLocale(params);
-  // Reached through the recovery email (which signs the user in); the proxy
-  // also enforces this, the check here is defence in depth.
-  if (!(await getSessionUser())) redirect({ href: '/forgot-password', locale });
+  // Only a fresh recovery-email session may use this page (signed HttpOnly
+  // marker, see lib/auth/recovery.ts). The proxy enforces the same rule.
+  const user = await getSessionUser();
+  if (!user) redirect({ href: '/forgot-password', locale });
+  if (!(await isRecoverySession(user))) redirect({ href: '/profile', locale });
   const t = await getTranslations('auth.reset');
 
   return (

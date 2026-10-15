@@ -65,6 +65,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"maintenance_reports": {
+                  Row: {
+                    "created_at": string,"id": number,"kind": string,"report": NonNullable<Json>
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: never,"kind": string,"report": NonNullable<Json>
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: never,"kind"?: string,"report"?: NonNullable<Json>
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"profiles": {
                   Row: {
                     "avatar_path": string | null,"created_at": string,"display_name": string | null,"id": string,"locale": string,"timezone": string,"updated_at": string
@@ -153,7 +167,21 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            [_ in never]: never
+            "catalog_cache_cleanup":
+{ Args: { "p_dry_run"?: boolean,"p_older_than"?: string }; Returns: number
+                           },
+"catalog_cache_report":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
+"catalog_cache_stats":
+{ Args: { "p_orphan_age"?: string }; Returns: Json
+                           },
+"purge_rate_limits":
+{ Args: { "p_older_than"?: string }; Returns: number
+                           },
+"rate_limit_hit":
+{ Args: { "p_bucket": string,"p_max_requests": number,"p_user_id": string,"p_window_seconds": number }; Returns: boolean
+                           }
           }
           Enums: {
             "media_type": "movie"|"tv","watch_status": "planned"|"watching"|"completed"|"paused"|"dropped"

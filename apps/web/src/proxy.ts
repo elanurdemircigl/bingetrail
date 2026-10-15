@@ -2,6 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { routing } from '@/i18n/routing';
+import { isValidRecoveryMarker, RECOVERY_COOKIE } from '@/lib/auth/recovery';
 import { classifyPath } from '@/lib/routes';
 import { updateSession } from '@/lib/supabase/proxy';
 
@@ -23,7 +24,7 @@ export async function proxy(request: NextRequest) {
   const i18nResponse = handleI18nRouting(request);
   if (i18nResponse.headers.has('location')) return i18nResponse;
 
-  const { response, userId } = await updateSession(request, i18nResponse);
+  const { response, userId, sessionId } = await updateSession(request, i18nResponse);
   const { locale, kind } = classifyPath(pathname);
 
   const redirectTo = (target: string) => {
@@ -37,7 +38,14 @@ export async function proxy(request: NextRequest) {
     const next = encodeURIComponent(`${pathname}${search}`);
     return redirectTo(`/${locale}/login?next=${next}`);
   }
-  if (!userId && kind === 'recovery') return redirectTo(`/${locale}/forgot-password`);
+  if (kind === 'recovery') {
+    if (!userId) return redirectTo(`/${locale}/forgot-password`);
+    // A normal session (password or signup-confirmation login) may not use the
+    // reset form; only a fresh recovery-email session carries a valid marker.
+    const marker = request.cookies.get(RECOVERY_COOKIE)?.value;
+    const binding = sessionId ? { userId, sessionId } : null;
+    if (!isValidRecoveryMarker(marker, binding)) return redirectTo(`/${locale}/profile`);
+  }
   if (userId && kind === 'guest-only') return redirectTo(`/${locale}/home`);
 
   return response;

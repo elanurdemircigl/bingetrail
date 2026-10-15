@@ -111,29 +111,65 @@ test.describe('no account enumeration', () => {
   });
 });
 
-test('password reset via emailed link', async ({ page }) => {
-  const email = uniqueEmail('reset');
-  const newPassword = 'trail2027';
-  await signUpAndConfirm(page, email);
-  await signOut(page);
+test.describe('password reset', () => {
+  test('a normal session cannot open the reset form', async ({ page, context }) => {
+    const email = uniqueEmail('noreset');
+    // Session from the signup-confirmation link (Supabase amr "otp", like recovery).
+    await signUpAndConfirm(page, email);
+    await page.goto('/tr/reset-password');
+    await expect(page).toHaveURL(/\/tr\/profile$/);
 
-  await page.goto('/tr/forgot-password');
-  await page.getByLabel(tr.auth.forgot.email).fill(email);
-  await page.getByRole('button', { name: tr.auth.forgot.submit }).click();
-  await expect(page.getByRole('status')).toHaveText(tr.auth.checkEmail.forgotBody);
+    // Session from a password sign-in.
+    await signOut(page);
+    await signIn(page, email, PASSWORD);
+    await expect(page).toHaveURL(/\/tr\/home$/);
+    await page.goto('/tr/reset-password');
+    await expect(page).toHaveURL(/\/tr\/profile$/);
 
-  await page.goto(await getAuthLinkPath(email, 'recovery'));
-  await expect(page).toHaveURL(/\/tr\/reset-password$/);
-  await page.getByLabel(tr.auth.reset.password, { exact: true }).fill(newPassword);
-  await page.getByLabel(tr.auth.reset.confirmPassword).fill(newPassword);
-  await page.getByRole('button', { name: tr.auth.reset.submit }).click();
-  await expect(page.getByRole('status')).toHaveText(tr.auth.passwordUpdated);
+    // A forged marker cookie does not help either.
+    await context.addCookies([
+      { name: 'bt_recovery', value: 'eyJzdWIiOiJ4In0.forged', url: 'http://127.0.0.1:3100' },
+    ]);
+    await page.goto('/tr/reset-password');
+    await expect(page).toHaveURL(/\/tr\/profile$/);
+  });
 
-  await signOut(page);
-  await signIn(page, email, PASSWORD);
-  await expect(formAlert(page)).toHaveText(tr.errors.invalidCredentials);
-  await signIn(page, email, newPassword);
-  await expect(page).toHaveURL(/\/tr\/home/);
+  test('the emailed recovery link opens the form once and sets a new password', async ({
+    page,
+    context,
+  }) => {
+    const email = uniqueEmail('reset');
+    const newPassword = 'trail2027';
+    await signUpAndConfirm(page, email);
+    await signOut(page);
+
+    await page.goto('/tr/forgot-password');
+    await page.getByLabel(tr.auth.forgot.email).fill(email);
+    await page.getByRole('button', { name: tr.auth.forgot.submit }).click();
+    await expect(page.getByRole('status')).toHaveText(tr.auth.checkEmail.forgotBody);
+
+    await page.goto(await getAuthLinkPath(email, 'recovery'));
+    await expect(page).toHaveURL(/\/tr\/reset-password$/);
+    const marker = (await context.cookies()).find((c) => c.name === 'bt_recovery');
+    expect(marker?.httpOnly, 'recovery marker must be HttpOnly').toBe(true);
+    expect(page.url()).not.toContain('token');
+
+    await page.getByLabel(tr.auth.reset.password, { exact: true }).fill(newPassword);
+    await page.getByLabel(tr.auth.reset.confirmPassword).fill(newPassword);
+    await page.getByRole('button', { name: tr.auth.reset.submit }).click();
+    await expect(page.getByRole('status')).toHaveText(tr.auth.passwordUpdated);
+
+    // Single use: the marker is gone, so the form is closed again.
+    expect((await context.cookies()).some((c) => c.name === 'bt_recovery')).toBe(false);
+    await page.goto('/tr/reset-password');
+    await expect(page).toHaveURL(/\/tr\/profile$/);
+
+    await signOut(page);
+    await signIn(page, email, PASSWORD);
+    await expect(formAlert(page)).toHaveText(tr.errors.invalidCredentials);
+    await signIn(page, email, newPassword);
+    await expect(page).toHaveURL(/\/tr\/home/);
+  });
 });
 
 test('language preference is saved to the profile and follows the user', async ({ page }) => {

@@ -132,7 +132,12 @@ function walk(dir) {
 /** @param {string} root @returns {Finding[]} */
 export function runChecks(root = REPO_ROOT, env = process.env) {
   const { publicEnv: allowed } = loadAllowlist();
-  const files = [...walk(join(root, 'apps')), ...walk(join(root, 'packages'))];
+  const files = [
+    ...walk(join(root, 'apps')),
+    ...walk(join(root, 'packages')),
+    // Edge Function secrets: only the example file is checked (it must stay empty).
+    ...walk(join(root, 'supabase')).filter((file) => file.endsWith('.env.example')),
+  ];
   const rootExample = join(root, '.env.example');
   if (existsSync(rootExample)) files.push(rootExample);
 

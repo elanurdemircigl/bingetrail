@@ -9,7 +9,7 @@ import { hardenCookieOptions } from './cookies';
 
 /**
  * Refreshes the Supabase session for this request and writes rotated cookies
- * onto `response`. Returns the verified user id (or null).
+ * onto `response`. Returns the verified user and session ids (or null).
  *
  * getClaims() validates the JWT (via JWKS, or the Auth server for symmetric
  * keys) — never trust getSession() on the server.
@@ -17,7 +17,7 @@ import { hardenCookieOptions } from './cookies';
 export async function updateSession(
   request: NextRequest,
   response: NextResponse,
-): Promise<{ response: NextResponse; userId: string | null }> {
+): Promise<{ response: NextResponse; userId: string | null; sessionId: string | null }> {
   const { url, publishableKey } = getSupabaseEnv();
 
   const supabase = createServerClient<Database>(url, publishableKey, {
@@ -35,5 +35,10 @@ export async function updateSession(
   });
 
   const { data } = await supabase.auth.getClaims();
-  return { response, userId: data?.claims.sub ?? null };
+  const sessionId = data?.claims.session_id;
+  return {
+    response,
+    userId: data?.claims.sub ?? null,
+    sessionId: typeof sessionId === 'string' ? sessionId : null,
+  };
 }

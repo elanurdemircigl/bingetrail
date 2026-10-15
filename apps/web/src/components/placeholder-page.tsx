@@ -1,7 +1,7 @@
 import type { Locale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
-type Section = 'search' | 'list' | 'calendar';
+type Section = 'calendar';
 
 /** Shell page for sections whose features arrive in later phases. */
 export async function PlaceholderPage({ section }: { section: Section }) {

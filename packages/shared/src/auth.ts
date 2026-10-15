@@ -22,6 +22,9 @@ export const VALIDATION_CODES = [
   'passwordNeedsLetter',
   'passwordNeedsDigit',
   'passwordsDontMatch',
+  'ratingRange',
+  'notesTooLong',
+  'confirmRequired',
 ] as const;
 export type ValidationCode = (typeof VALIDATION_CODES)[number];
 

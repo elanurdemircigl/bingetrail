@@ -44,6 +44,17 @@ jobs:
       - name: Security scanner tests
         run: pnpm run test:security
 
+      - name: Shared contracts are in sync with Edge Functions
+        run: pnpm run contracts:check
+
+      # Same Deno version as the Supabase edge runtime (see tooling/scripts/deno-test.mjs).
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: 2.1.4
+
+      - name: Edge Functions type-check and tests
+        run: pnpm run test:functions
+
   e2e:
     name: Web build, bundle security, E2E (local Supabase)
     runs-on: ubuntu-latest
@@ -61,11 +72,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Auth, REST, gateway and the mail catcher are enough for the auth flows.
+      # Auth, REST, Storage (avatar removal on account deletion), gateway, mail
+      # catcher and the edge runtime are what E2E needs. The functions are served
+      # by Playwright with a TMDB mock and a throwaway deletion salt
+      # (e2e/tmdb-mock/start-services.mjs) — no real secrets in CI.
       - name: Start local Supabase
         run: >-
           pnpm exec supabase start
-          -x studio,imgproxy,storage-api,realtime,edge-runtime,logflare,vector,supavisor,postgres-meta
+          -x studio,imgproxy,realtime,logflare,vector,supavisor,postgres-meta
           > /dev/null
 
       # Public URL + publishable key come from the local stack via the wrapper;
@@ -79,7 +93,7 @@ jobs:
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: E2E (auth flows, access control, i18n, smoke)
+      - name: E2E (auth, access control, i18n, catalog, watchlist, account deletion)
         run: pnpm run test:e2e
 
       - name: Upload Playwright report

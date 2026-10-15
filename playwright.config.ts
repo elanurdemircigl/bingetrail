@@ -7,8 +7,11 @@ const baseURL = `http://127.0.0.1:${PORT}`;
 //   pnpm db:start && pnpm build:web:local && pnpm test:e2e
 // `pnpm test:e2e` injects the local public Supabase settings (see
 // tooling/scripts/with-local-supabase-env.mjs); no .env file is involved.
+// The tmdb Edge Function is served against a TMDB mock (e2e/tmdb-mock), so no
+// real TMDB key is ever needed for tests.
 export default defineConfig({
   testDir: './e2e',
+  globalTeardown: './e2e/global-teardown.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -19,10 +22,18 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: {
-    command: `pnpm --filter @bingetrail/web exec next start --port ${PORT}`,
-    url: `${baseURL}/tr`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command: 'node e2e/tmdb-mock/start-services.mjs',
+      url: 'http://127.0.0.1:3201/ready',
+      reuseExistingServer: !process.env.CI,
+      timeout: 300_000,
+    },
+    {
+      command: `pnpm --filter @bingetrail/web exec next start --port ${PORT}`,
+      url: `${baseURL}/tr`,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });

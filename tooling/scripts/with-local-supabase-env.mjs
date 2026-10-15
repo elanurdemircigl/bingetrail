@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 // Runs a command with the PUBLIC settings of the running local Supabase stack:
 //   NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, MAILPIT_URL
+// plus a random per-run AUTH_COOKIE_SECRET (server-only HMAC key) unless one is set.
 // Values are read from `supabase status -o env` and passed only through the
 // child's environment. They are never printed and never written to disk, so no
 // .env.local file is needed for local E2E or CI.
 //
 // Usage: node tooling/scripts/with-local-supabase-env.mjs <command> [args...]
-import { spawn, spawnSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
+
+import { run, runSync } from './spawn.mjs';
 
 const [command, ...args] = process.argv.slice(2);
 if (!command) {
@@ -14,9 +17,8 @@ if (!command) {
   process.exit(2);
 }
 
-const status = spawnSync('pnpm', ['exec', 'supabase', 'status', '-o', 'env'], {
+const status = runSync('pnpm', ['exec', 'supabase', 'status', '-o', 'env'], {
   encoding: 'utf8',
-  shell: process.platform === 'win32',
   stdio: ['ignore', 'pipe', 'ignore'],
 });
 if (status.status !== 0) {
@@ -26,7 +28,7 @@ if (status.status !== 0) {
 
 /** @type {Record<string, string>} */
 const local = {};
-for (const line of status.stdout.split(/\r?\n/)) {
+for (const line of String(status.stdout).split(/\r?\n/)) {
   const match = /^([A-Z0-9_]+)="?(.*?)"?$/.exec(line.trim());
   if (match?.[1] && match[2] !== undefined) local[match[1]] = match[2];
 }
@@ -43,14 +45,14 @@ if (!publishableKey.startsWith('sb_publishable_')) {
   process.exit(1);
 }
 
-const child = spawn(command, args, {
+const child = run(command, args, {
   stdio: 'inherit',
-  shell: process.platform === 'win32',
   env: {
     ...process.env,
     NEXT_PUBLIC_SUPABASE_URL: url,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: publishableKey,
     MAILPIT_URL: process.env.MAILPIT_URL ?? local.MAILPIT_URL ?? 'http://127.0.0.1:54324',
+    AUTH_COOKIE_SECRET: process.env.AUTH_COOKIE_SECRET ?? randomBytes(32).toString('base64url'),
   },
 });
 child.on('exit', (code, signal) => process.exit(signal ? 1 : (code ?? 1)));

@@ -4,12 +4,14 @@
 
 ## 1. Anahtar envanteri
 
-| Anahtar                                                                     | Nerede yaşar                                                   | İstemciye girebilir mi? | Kim girer                               |
-| --------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------- | --------------------------------------- |
-| Supabase URL                                                                | `NEXT_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_URL`         | ✅ Evet (public)        | Depo sahibi, `.env.local` / hosting env |
-| Supabase publishable key (`sb_publishable_…`)                               | `*_PUBLIC_SUPABASE_PUBLISHABLE_KEY`                            | ✅ Evet. Yetki RLS'te   | Depo sahibi                             |
-| Supabase secret/service-role key (`sb_secret_…`, legacy `service_role` JWT) | Yalnızca Edge Function ortamı (Supabase otomatik enjekte eder) | ❌ **Asla**             | Supabase                                |
-| TMDB API read access token                                                  | Supabase Edge Function secret `TMDB_API_READ_ACCESS_TOKEN`     | ❌ **Asla**             | Depo sahibi, `supabase secrets set`     |
+| Anahtar                                                                     | Nerede yaşar                                                                                                     | İstemciye girebilir mi?                | Kim girer                               |
+| --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------- | --------------------------------------- |
+| Supabase URL                                                                | `NEXT_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_URL`                                                           | ✅ Evet (public)                       | Depo sahibi, `.env.local` / hosting env |
+| Supabase publishable key (`sb_publishable_…`)                               | `*_PUBLIC_SUPABASE_PUBLISHABLE_KEY`                                                                              | ✅ Evet. Yetki RLS'te                  | Depo sahibi                             |
+| Supabase secret/service-role key (`sb_secret_…`, legacy `service_role` JWT) | Yalnızca Edge Function ortamı (Supabase otomatik enjekte eder)                                                   | ❌ **Asla**                            | Supabase                                |
+| TMDB API read access token                                                  | Supabase Edge Function secret `TMDB_API_READ_ACCESS_TOKEN`; yerelde `supabase/functions/.env` (gitignored)       | ❌ **Asla**                            | Depo sahibi, `supabase secrets set`     |
+| `AUTH_COOKIE_SECRET` (recovery işareti HMAC anahtarı)                       | Web sunucu ortamı (hosting paneli / `apps/web/.env.local`); yerelde ve E2E'de her çalıştırmada rastgele üretilir | ❌ **Asla** (`NEXT_PUBLIC_` öneki yok) | Depo sahibi                             |
+| `ACCOUNT_DELETION_HASH_SALT` (Faz 4)                                        | Supabase Edge Function secret                                                                                    | ❌ **Asla**                            | Depo sahibi, `supabase secrets set`     |
 
 Service role yalnızca şu fonksiyonlarda kullanılır: `tmdb` (katalog önbelleği), `refresh-upcoming` (zamanlanmış iş), `delete-account` (`auth.admin.deleteUser`).
 

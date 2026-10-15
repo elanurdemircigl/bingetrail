@@ -8,11 +8,12 @@ type Enums = Database['public']['Enums'];
 // These are compile-time assertions: `tsc --noEmit` fails if the generated types
 // drift from the schema the app code expects. Regenerate with `pnpm db:types`.
 describe('Database types', () => {
-  it('exposes every Faz 1 table', () => {
+  it('exposes every table', () => {
     expectTypeOf<keyof Tables>().toEqualTypeOf<
       | 'account_deletion_log'
       | 'episode_progress'
       | 'episodes'
+      | 'maintenance_reports'
       | 'profiles'
       | 'rate_limits'
       | 'seasons'

@@ -6,7 +6,10 @@ describe('classifyPath', () => {
   it.each([
     ['/tr/home', 'tr', '/home', 'protected'],
     ['/en/list/42', 'en', '/list/42', 'protected'],
+    ['/tr/title/tv/1399/season/1', 'tr', '/title/tv/1399/season/1', 'protected'],
     ['/tr/profile/', 'tr', '/profile', 'protected'],
+    ['/en/profile/delete', 'en', '/profile/delete', 'protected'],
+    ['/tr/account-deleted', 'tr', '/account-deleted', 'public'],
     ['/tr/login', 'tr', '/login', 'guest-only'],
     ['/en/forgot-password', 'en', '/forgot-password', 'guest-only'],
     ['/tr/reset-password', 'tr', '/reset-password', 'recovery'],

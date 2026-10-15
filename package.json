@@ -26,9 +26,13 @@
     "db:test": "supabase test db",
     "db:lint": "supabase db lint --local --schema public --fail-on error",
     "db:advisors": "supabase db advisors --local --type all --level info --fail-on warn",
-    "db:types": "supabase gen types typescript --local --schema public > packages/db-types/src/database.types.ts",
+    "db:types": "node tooling/scripts/gen-db-types.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "contracts:sync": "node tooling/scripts/sync-contracts.mjs",
+    "contracts:check": "node tooling/scripts/sync-contracts.mjs --check",
+    "test:functions": "node tooling/scripts/deno-test.mjs",
+    "e2e:cleanup": "node e2e/tmdb-mock/cleanup-cli.mjs"
   },
   "devDependencies": {
     "@playwright/test": "catalog:",

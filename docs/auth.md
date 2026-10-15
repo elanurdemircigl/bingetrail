@@ -11,13 +11,28 @@
 | Giriş             | `/[locale]/login` → `signInAction` → `next` ya da `/[profil dili]/home`                 | Hangi hata olursa olsun tek mesaj gösterilir                                                |
 | Çıkış             | Formdan `signOutAction` çağrılır (JavaScript gerekmez)                                  | `scope: 'local'`: yalnızca bu cihazın oturumu kapanır                                       |
 | Parolamı unuttum  | `/forgot-password` → `/check-email`                                                     | Adres kayıtlı olsun olmasın aynı yanıt                                                      |
-| Parola sıfırlama  | E-posta → `/auth/confirm?type=recovery` → `/reset-password` → `/home?passwordUpdated=1` | Kurtarma oturumu yoksa `/forgot-password` sayfasına yönlendirir                             |
+| Parola sıfırlama  | E-posta → `/auth/confirm?type=recovery` → `/reset-password` → `/home?passwordUpdated=1` | Yalnızca geçerli recovery işareti olan oturum girebilir (aşağıya bakınız)                   |
 | Dil değiştirme    | Misafir: sayfadaki dil bağlantısı. Giriş yapmış: Profil → Uygulama dili                 | Tercih `profiles.locale` alanına ve `NEXT_LOCALE` cookie'sine yazılır                       |
 
 **Erişim kuralları** (`src/lib/routes.ts`, `src/proxy.ts`):
 
-- **Korumalı sayfalar** (`/home`, `/search`, `/list`, `/calendar`, `/profile`): Oturum yoksa `/login?next=…` sayfasına yönlendirir.
+- **Korumalı sayfalar** (`/home`, `/search`, `/title/…`, `/list`, `/calendar`, `/profile`): Oturum yoksa `/login?next=…` sayfasına yönlendirir.
 - **Yalnızca misafire açık sayfalar** (`/login`, `/signup`, `/forgot-password`): Giriş yapmış kullanıcıyı `/home` sayfasına yönlendirir.
+- **`/reset-password`:** Oturum yoksa `/forgot-password` sayfasına, normal bir oturumla gelinmişse `/profile` sayfasına yönlendirir.
+
+## Parola sıfırlama yalnızca recovery akışında
+
+Supabase, recovery bağlantısıyla açılan oturumu da e-posta doğrulama bağlantısıyla açılan oturumu da JWT'de aynı şekilde işaretliyor (`amr: "otp"`). Bu yüzden JWT tek başına ikisini ayırt edemiyor. Ayrım şöyle yapılıyor (`src/lib/auth/recovery.ts`):
+
+1. `/auth/confirm`, **yalnızca `type=recovery` doğrulandıktan sonra** `bt_recovery` cookie'sini yazar. Cookie'nin özellikleri:
+   - `HttpOnly`, `SameSite=Lax`, production'da `Secure`.
+   - 15 dakika geçerli.
+   - İçeriği `{ sub, session_id, exp }`. Bu içerik **sunucuya ait bir anahtarla HMAC-SHA256 ile imzalanır** (`AUTH_COOKIE_SECRET`).
+2. Proxy, sayfa ve `resetPasswordAction` üçü de işareti doğrular: imza geçerli mi, kullanıcı aynı mı, **oturum aynı mı**, süresi dolmamış mı. Server Action doğrudan çağrılabildiği için action'daki kontrol de şart.
+3. Parola değişince ve çıkış yapılınca cookie silinir; işaret tek kullanımlık.
+4. URL'ye hiçbir token ya da değer konmaz. Anahtar yoksa ya da 32 karakterden kısaysa akış kapalı kalır (fail closed) ve bu durum sunucu log'una yazılır.
+
+E2E testleri hem normal oturumun reddedildiğini (e-posta doğrulama ve parola girişi, sahte cookie dahil) hem de gerçek recovery bağlantısının çalıştığını doğruluyor.
 
 ## Parola politikası
 
@@ -53,8 +68,9 @@ pnpm test:e2e          # Playwright (önce build:web:local)
    - Bağlantılar `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=…` biçiminde olmalı.
 4. **Authentication → SMTP:** Production için kendi SMTP sağlayıcını tanımla. Supabase'in yerleşik e-posta servisi saatte çok az e-posta gönderebiliyor.
 5. **Web uygulaması ortam değişkenleri** (hosting paneli veya `apps/web/.env.local`):
-   - Yalnızca `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (`sb_publishable_…`).
+   - Public olarak yalnızca `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (`sb_publishable_…`).
    - **Secret key (`sb_secret_…`) asla bu değişkenlere konmaz.** `security:check` bunu yakalar.
+   - Yalnızca sunucuda: `AUTH_COOKIE_SECRET`, 32 karakterden uzun rastgele bir dize. Üretmek için: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`. Bu değişken tanımlı değilse parola sıfırlama çalışmaz. Değiştirildiğinde, o sırada süren recovery akışları da geçersiz olur.
 
 ## Testler
 

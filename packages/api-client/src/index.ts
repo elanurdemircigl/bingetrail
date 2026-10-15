@@ -11,3 +11,17 @@ export {
   updateProfileLocale,
   type ProfileDTO,
 } from './profile';
+export { CatalogError, getSeasonDetail, getTitleDetail, searchCatalog } from './catalog';
+export {
+  WatchlistError,
+  addToWatchlist,
+  getWatchlist,
+  getWatchlistCounts,
+  getWatchlistItemForTitle,
+  mapWatchlistItem,
+  removeFromWatchlist,
+  updateWatchlistDetails,
+  updateWatchlistStatus,
+  type WatchlistItemDTO,
+} from './watchlist';
+export { AccountError, deleteAccount } from './account';
