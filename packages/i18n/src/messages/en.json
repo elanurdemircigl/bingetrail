@@ -34,8 +34,7 @@
       "submitting": "Signing in…",
       "forgot": "Forgot your password?",
       "noAccount": "No account yet?",
-      "signUpLink": "Create one",
-      "confirmHint": "Just signed up? Click the confirmation link in your email first."
+      "signUpLink": "Create one"
     },
     "signup": {
       "title": "Create account",
@@ -90,7 +89,8 @@
     "reauthRequired": "For your security, sign in again and retry.",
     "rateLimited": "Too many attempts. Please wait a moment and try again.",
     "linkInvalid": "This link is invalid or has expired. Request a new one.",
-    "unexpected": "Something went wrong. Please try again."
+    "unexpected": "Something went wrong. Please try again.",
+    "emailTaken": "This email address is already registered. Sign in or reset your password."
   },
   "pages": {
     "home": {

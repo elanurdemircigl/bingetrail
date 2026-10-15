@@ -36,6 +36,7 @@ export const AUTH_ERROR_CODES = [
   'reauthRequired',
   'rateLimited',
   'linkInvalid',
+  'emailTaken',
   'unexpected',
 ] as const;
 export type AuthErrorCode = (typeof AUTH_ERROR_CODES)[number];

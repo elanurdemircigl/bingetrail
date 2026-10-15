@@ -61,7 +61,7 @@ export async function signUpAction(input: unknown): Promise<ActionResult> {
 
   const locale = await currentLocale();
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     // Read by the handle_new_user trigger and by the email templates.
@@ -69,10 +69,21 @@ export async function signUpAction(input: unknown): Promise<ActionResult> {
   });
 
   if (error) {
+    // Email confirmation is off (product decision, docs/auth.md): a successful
+    // sign-up signs the user in, so a registered address cannot be hidden here.
+    if (error.code === 'user_already_exists' || error.code === 'email_exists') {
+      return { ok: false, error: 'emailTaken' };
+    }
     const code = toAuthErrorCode(error, 'unexpected');
-    // Only errors that do not reveal whether the address is registered are shown.
     if (code === 'weakPassword' || code === 'rateLimited') return { ok: false, error: code };
+    return { ok: false, error: 'unexpected' };
   }
+
+  if (data.session) {
+    await rememberLocale(locale);
+    redirect(`/${locale}/home`);
+  }
+  // Only reached if a project still requires email confirmation.
   redirect(`/${locale}/check-email?reason=signup`);
 }
 

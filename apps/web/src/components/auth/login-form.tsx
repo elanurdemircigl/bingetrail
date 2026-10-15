@@ -52,7 +52,6 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
       <SubmitButton pending={pending} pendingLabel={t('submitting')}>
         {t('submit')}
       </SubmitButton>
-      <p className="text-ink-muted text-sm">{t('confirmHint')}</p>
       <div className="flex flex-wrap justify-between gap-2 text-sm">
         <Link href="/forgot-password" className="text-brand-500 underline-offset-4 hover:underline">
           {t('forgot')}

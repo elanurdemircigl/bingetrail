@@ -144,3 +144,11 @@
 | Silinen kullanıcının JWT'si süresi dolana kadar (≤ 1 saat) imza olarak geçerli    | Kullanıcı satırı ve bütün verisi silindiği için JWT hiçbir veriye erişmez; fonksiyonlar `getUser` ile 401 döner. Diğer cihazlar bir sonraki istekte oturumu kaybeder |
 | Denetim kaydı yazılamazsa silme yine "başarılı" döner                             | Hesap gerçekten silinmiştir; kullanıcıya hata göstermek yanıltıcı olur. Durum log'a yazılır                                                                          |
 | Storage silindikten sonra `deleteUser` başarısız olursa avatar gider, hesap kalır | Kişisel veri sızıntısı değil, veri kaybı; kullanıcı işlemi tekrarlayabilir. Ters sıra sahipsiz kişisel dosya bırakırdı                                               |
+
+## Ürün kararı: kayıtta e-posta doğrulaması kapalı (Faz 4 sonrası)
+
+| Risk                                         | Durum ve önlem                                                                                                                         |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Kayıt ekranında hesap varlığının anlaşılması | **Kabul edildi.** Otomatik giriş yapan kayıtta gizlenemez; `emailTaken` mesajı. Giriş ve parola sıfırlama yanıtları hâlâ aynı (E2E)    |
+| Başkasının e-posta adresiyle hesap açmak     | **Kabul edildi.** Adresin gerçek sahibi parola sıfırlama ile hesabı ele geçirebilir; sıfırlama bağlantısı yalnızca gerçek adrese gider |
+| Otomatik hesap açma (spam/bot)               | Supabase Auth hız sınırları (`[auth.rate_limit]`). CAPTCHA ihtiyacı Faz 10'da yeniden değerlendirilecek                                |

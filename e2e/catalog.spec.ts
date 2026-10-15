@@ -1,12 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { en, signUpAndConfirm, tr, uniqueEmail } from './support/auth';
+import { en, signUp, tr, uniqueEmail } from './support/auth';
 
 // Catalog flows run through the real tmdb Edge Function and database cache,
 // with TMDB replaced by e2e/tmdb-mock (fixtures: "Kırmızı Hap", "Kuzey Kalesi").
 
 async function signedIn(page: Page) {
-  await signUpAndConfirm(page, uniqueEmail('catalog'));
+  await signUp(page, uniqueEmail('catalog'));
 }
 
 test('guests cannot open catalog pages', async ({ page }) => {

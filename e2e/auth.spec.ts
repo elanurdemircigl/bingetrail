@@ -7,7 +7,7 @@ import {
   signIn,
   signOut,
   signUp,
-  signUpAndConfirm,
+  submitSignUp,
   tr,
   uniqueEmail,
 } from './support/auth';
@@ -32,7 +32,7 @@ test.describe('access control', () => {
 
   test('`next` cannot redirect to another site', async ({ page }) => {
     const email = uniqueEmail('next');
-    await signUpAndConfirm(page, email);
+    await signUp(page, email);
     await signOut(page);
 
     await signIn(page, email, PASSWORD, '/tr/login?next=%2F%2Fevil.example');
@@ -43,7 +43,7 @@ test.describe('access control', () => {
 test.describe('sign up, sign in, sign out', () => {
   test('full lifecycle with HttpOnly session cookies', async ({ page, context }) => {
     const email = uniqueEmail('life');
-    await signUpAndConfirm(page, email);
+    await signUp(page, email);
     await expect(page.getByRole('heading', { name: tr.pages.home.welcome })).toBeVisible();
 
     const sessionCookies = (await context.cookies()).filter((c) => c.name.startsWith('sb-'));
@@ -70,7 +70,7 @@ test.describe('sign up, sign in, sign out', () => {
 
   test('sign-in returns to the originally requested page', async ({ page }) => {
     const email = uniqueEmail('return');
-    await signUpAndConfirm(page, email);
+    await signUp(page, email);
     await signOut(page);
 
     await page.goto('/tr/calendar');
@@ -84,7 +84,7 @@ test.describe('sign up, sign in, sign out', () => {
 test.describe('no account enumeration', () => {
   test('wrong password and unknown email produce the same message', async ({ page }) => {
     const email = uniqueEmail('enum');
-    await signUpAndConfirm(page, email);
+    await signUp(page, email);
     await signOut(page);
 
     await signIn(page, email, 'wrong-password-1');
@@ -94,13 +94,22 @@ test.describe('no account enumeration', () => {
     await expect(formAlert(page)).toHaveText(tr.errors.invalidCredentials);
   });
 
-  test('signing up with a registered email looks like a normal sign-up', async ({ page }) => {
+  test('signing up with a registered email says so and creates no session', async ({
+    page,
+    context,
+  }) => {
     const email = uniqueEmail('dupe');
-    await signUpAndConfirm(page, email);
+    await signUp(page, email);
     await signOut(page);
 
-    await signUp(page, email); // asserts the same "check your email" page
-    await expect(page.getByRole('status')).toHaveText(tr.auth.checkEmail.signupBody);
+    // Accepted trade-off (docs/auth.md): without email confirmation sign-up
+    // signs the user in, so a registered address cannot be hidden here.
+    await submitSignUp(page, email);
+    await expect(formAlert(page)).toHaveText(tr.errors.emailTaken);
+    await expect(page).toHaveURL(/\/tr\/signup$/);
+    const cookies = await context.cookies();
+    // Only the PKCE verifier may exist; no session token cookie is set.
+    expect(cookies.filter((c) => /^sb-.+-auth-token(\.\d+)?$/.test(c.name))).toEqual([]);
   });
 
   test('forgot-password gives the same answer for unknown addresses', async ({ page }) => {
@@ -114,8 +123,8 @@ test.describe('no account enumeration', () => {
 test.describe('password reset', () => {
   test('a normal session cannot open the reset form', async ({ page, context }) => {
     const email = uniqueEmail('noreset');
-    // Session from the signup-confirmation link (Supabase amr "otp", like recovery).
-    await signUpAndConfirm(page, email);
+    // Session created directly by sign-up (no email confirmation).
+    await signUp(page, email);
     await page.goto('/tr/reset-password');
     await expect(page).toHaveURL(/\/tr\/profile$/);
 
@@ -140,7 +149,7 @@ test.describe('password reset', () => {
   }) => {
     const email = uniqueEmail('reset');
     const newPassword = 'trail2027';
-    await signUpAndConfirm(page, email);
+    await signUp(page, email);
     await signOut(page);
 
     await page.goto('/tr/forgot-password');
@@ -174,7 +183,7 @@ test.describe('password reset', () => {
 
 test('language preference is saved to the profile and follows the user', async ({ page }) => {
   const email = uniqueEmail('lang');
-  await signUpAndConfirm(page, email);
+  await signUp(page, email);
 
   await page.getByRole('link', { name: tr.nav.profile }).click();
   await page.getByLabel(tr.profile.language).selectOption('en');

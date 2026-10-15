@@ -4,15 +4,15 @@
 
 ## Akışlar
 
-| Akış              | Sayfa ve uç nokta                                                                       | Notlar                                                                                      |
-| ----------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Kayıt             | `/[locale]/signup` → `signUpAction` → `/check-email`                                    | Dil tercihi `user_metadata.locale` alanına yazılır; profil tetikleyicisi bu değeri kullanır |
-| E-posta doğrulama | E-posta → `/auth/confirm?type=email` → `/[locale]/home`                                 | `verifyOtp` sunucuda çalışır, oturum HttpOnly cookie'ye yazılır                             |
-| Giriş             | `/[locale]/login` → `signInAction` → `next` ya da `/[profil dili]/home`                 | Hangi hata olursa olsun tek mesaj gösterilir                                                |
-| Çıkış             | Formdan `signOutAction` çağrılır (JavaScript gerekmez)                                  | `scope: 'local'`: yalnızca bu cihazın oturumu kapanır                                       |
-| Parolamı unuttum  | `/forgot-password` → `/check-email`                                                     | Adres kayıtlı olsun olmasın aynı yanıt                                                      |
-| Parola sıfırlama  | E-posta → `/auth/confirm?type=recovery` → `/reset-password` → `/home?passwordUpdated=1` | Yalnızca geçerli recovery işareti olan oturum girebilir (aşağıya bakınız)                   |
-| Dil değiştirme    | Misafir: sayfadaki dil bağlantısı. Giriş yapmış: Profil → Uygulama dili                 | Tercih `profiles.locale` alanına ve `NEXT_LOCALE` cookie'sine yazılır                       |
+| Akış              | Sayfa ve uç nokta                                                                                        | Notlar                                                                                                            |
+| ----------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Kayıt             | `/[locale]/signup` → `signUpAction` → `/[locale]/home` (oturum hemen açılır)                             | **E-posta doğrulaması kapalı** (ürün kararı, aşağıya bakınız). Dil tercihi `user_metadata.locale` alanına yazılır |
+| E-posta doğrulama | Kullanılmıyor. Proje doğrulama isterse kayıt `/check-email`'e düşer; bağlantı `/auth/confirm?type=email` | Yedek yol olarak kodda duruyor                                                                                    |
+| Giriş             | `/[locale]/login` → `signInAction` → `next` ya da `/[profil dili]/home`                                  | Hangi hata olursa olsun tek mesaj gösterilir                                                                      |
+| Çıkış             | Formdan `signOutAction` çağrılır (JavaScript gerekmez)                                                   | `scope: 'local'`: yalnızca bu cihazın oturumu kapanır                                                             |
+| Parolamı unuttum  | `/forgot-password` → `/check-email`                                                                      | Adres kayıtlı olsun olmasın aynı yanıt                                                                            |
+| Parola sıfırlama  | E-posta → `/auth/confirm?type=recovery` → `/reset-password` → `/home?passwordUpdated=1`                  | Yalnızca geçerli recovery işareti olan oturum girebilir (aşağıya bakınız)                                         |
+| Dil değiştirme    | Misafir: sayfadaki dil bağlantısı. Giriş yapmış: Profil → Uygulama dili                                  | Tercih `profiles.locale` alanına ve `NEXT_LOCALE` cookie'sine yazılır                                             |
 
 **Erişim kuralları** (`src/lib/routes.ts`, `src/proxy.ts`):
 
@@ -59,12 +59,12 @@ pnpm test:e2e          # Playwright (önce build:web:local)
    - Site URL: production adresin (ör. `https://bingetrail.example`).
    - Redirect URLs: `https://bingetrail.example/**`. Gerekirse preview adreslerini de ekle.
 2. **Authentication → Sign In / Providers → Email**
-   - Confirm email: **açık**
+   - Confirm email: **kapalı** (yerel `config.toml` ile aynı olmalı; aşağıdaki karara bakınız)
    - Secure password change: **açık**
    - Minimum password length: **8**, Password requirements: **letters and digits**
    - Leaked password protection: **açık** (planın destekliyorsa)
 3. **Authentication → Email Templates**
-   - "Confirm signup" ve "Reset password" şablonlarına `supabase/templates/confirmation.html` ve `recovery.html` dosyalarının içeriğini yapıştır.
+   - "Reset password" (ve doğrulama ileride açılırsa "Confirm signup") şablonlarına `supabase/templates/confirmation.html` ve `recovery.html` dosyalarının içeriğini yapıştır.
    - Bağlantılar `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=…` biçiminde olmalı.
 4. **Authentication → SMTP:** Production için kendi SMTP sağlayıcını tanımla. Supabase'in yerleşik e-posta servisi saatte çok az e-posta gönderebiliyor.
 5. **Web uygulaması ortam değişkenleri** (hosting paneli veya `apps/web/.env.local`):
@@ -81,3 +81,15 @@ pnpm test:e2e          # Playwright (önce build:web:local)
 | Web birim   | `apps/web/src/lib/*.test.ts`                                | Açık yönlendirme, rota sınıflandırma, hata eşleme                                                                              |
 | Web bileşen | `apps/web/src/components/auth/auth-forms.test.tsx`          | Doğrulama mesajları, Server Action çağrısı, genel hata mesajı                                                                  |
 | E2E         | `e2e/auth.spec.ts`, `e2e/smoke.spec.ts`                     | Kayıt → e-posta doğrulama → giriş/çıkış, sıfırlama, hesap varlığını sızdırmama, HttpOnly cookie, açık yönlendirme, dil tercihi |
+
+## Karar: kayıtta e-posta doğrulaması yok (2026-10-15)
+
+Depo sahibinin isteğiyle kayıt olan kullanıcı e-postasını doğrulamadan hemen giriş yapar.
+
+- **Yerel:** `supabase/config.toml` → `[auth.email] enable_confirmations = false`. Değişiklik `pnpm db:stop && pnpm db:start` ile geçerli olur.
+- **Uzak proje:** Dashboard → Authentication → Sign In / Providers → Email → **Confirm email kapalı**. Bunu depo sahibi yapar.
+- `signUpAction` oturum dönerse `/home`'a yönlendirir. Proje yine de doğrulama isterse eski davranışa (`/check-email`) düşer.
+- **Kabul edilen riskler:**
+  - **Kayıtta hesap varlığı anlaşılabilir.** Kayıtlı bir adresle kayıt denendiğinde "Bu e-posta adresi zaten kayıtlı" mesajı gösterilir. Başarılı kayıt kullanıcıyı içeri aldığı için bu durum zaten gizlenemezdi. Giriş ve parola sıfırlama ekranları hesap varlığını hâlâ ele vermez.
+  - **E-posta sahipliği kanıtlanmaz.** Biri başkasının adresiyle hesap açabilir. Adresin gerçek sahibi "Parolamı unuttum" ile hesabı ele geçirebilir. Parola sıfırlama e-postası gerçek adrese gittiği için başkası bu yolla hesaba giremez.
+  - Bu adreslere sıfırlama e-postası gönderilebilmesi için production'da SMTP ayarı yine gerekir.

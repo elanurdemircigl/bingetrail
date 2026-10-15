@@ -34,8 +34,7 @@
       "submitting": "Giriş yapılıyor…",
       "forgot": "Parolanı mı unuttun?",
       "noAccount": "Hesabın yok mu?",
-      "signUpLink": "Hesap oluştur",
-      "confirmHint": "Yeni hesap açtıysan önce e-postandaki doğrulama bağlantısına tıkla."
+      "signUpLink": "Hesap oluştur"
     },
     "signup": {
       "title": "Hesap oluştur",
@@ -90,7 +89,8 @@
     "reauthRequired": "Güvenliğin için tekrar giriş yapıp yeniden dene.",
     "rateLimited": "Çok fazla deneme yapıldı. Biraz bekleyip tekrar dene.",
     "linkInvalid": "Bağlantı geçersiz veya süresi dolmuş. Yeni bir bağlantı iste.",
-    "unexpected": "Beklenmeyen bir hata oluştu. Lütfen tekrar dene."
+    "unexpected": "Beklenmeyen bir hata oluştu. Lütfen tekrar dene.",
+    "emailTaken": "Bu e-posta adresi zaten kayıtlı. Giriş yap ya da parolanı sıfırla."
   },
   "pages": {
     "home": {

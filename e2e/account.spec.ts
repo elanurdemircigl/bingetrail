@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { formAlert, PASSWORD, signIn, signUpAndConfirm, tr, uniqueEmail } from './support/auth';
+import { formAlert, PASSWORD, signIn, signUp, tr, uniqueEmail } from './support/auth';
 import { callFunction, sessionOf, sqlValue, uploadAvatar, uuid } from './support/supabase';
 
 const d = tr.account.delete;
@@ -9,7 +9,7 @@ test('account deletion: re-authentication, irreversible removal and session clea
   page,
 }) => {
   const email = uniqueEmail('delete');
-  await signUpAndConfirm(page, email);
+  await signUp(page, email);
   const { accessToken, userId } = await sessionOf(page);
   const id = uuid(userId);
   const startedAt = sqlValue('select now()');

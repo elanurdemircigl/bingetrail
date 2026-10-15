@@ -123,4 +123,15 @@ describe('SignUpForm', () => {
       }),
     );
   });
+
+  it('tells the user when the address is already registered', async () => {
+    actions.signUpAction.mockResolvedValue({ ok: false, error: 'emailTaken' });
+    renderTr(<SignUpForm />);
+    type(tr.auth.signup.email, 'ayse@example.com');
+    type(tr.auth.signup.password, 'binge2026');
+    type(tr.auth.signup.confirmPassword, 'binge2026');
+    submit(tr.auth.signup.submit);
+
+    expect(await screen.findByText(tr.errors.emailTaken)).toBeTruthy();
+  });
 });

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { formAlert, signUpAndConfirm, tr, uniqueEmail } from './support/auth';
+import { formAlert, signUp, tr, uniqueEmail } from './support/auth';
 import { sessionOf, sqlValue, uuid } from './support/supabase';
 
 // The list is written with the user's own session (Server Actions + RLS).
@@ -23,7 +23,7 @@ async function addFromTitlePage(page: Page, path: string, statusLabel: string) {
 }
 
 test('add, rate, annotate, filter, sort and remove', async ({ page }) => {
-  await signUpAndConfirm(page, uniqueEmail('list'));
+  await signUp(page, uniqueEmail('list'));
   const { userId } = await sessionOf(page);
 
   await page.goto('/tr/list');
@@ -105,7 +105,7 @@ test('add, rate, annotate, filter, sort and remove', async ({ page }) => {
 });
 
 test('the title page shows the existing entry instead of a second add', async ({ page }) => {
-  await signUpAndConfirm(page, uniqueEmail('list-dup'));
+  await signUp(page, uniqueEmail('list-dup'));
   await addFromTitlePage(page, '/tr/title/movie/603', w.status.completed);
   await page.reload();
   const control = page.getByTestId('watchlist-control');
@@ -114,7 +114,7 @@ test('the title page shows the existing entry instead of a second add', async ({
 });
 
 test('notes over the limit are rejected in the form', async ({ page }) => {
-  await signUpAndConfirm(page, uniqueEmail('list-long'));
+  await signUp(page, uniqueEmail('list-long'));
   await addFromTitlePage(page, '/tr/title/movie/603', w.status.planned);
   const control = page.getByTestId('watchlist-control');
   await control.getByLabel(w.notes).fill('x'.repeat(5001));
@@ -125,11 +125,11 @@ test('notes over the limit are rejected in the form', async ({ page }) => {
 
 test("one user's list is invisible to another", async ({ browser }) => {
   const alice = await browser.newPage();
-  await signUpAndConfirm(alice, uniqueEmail('list-a'));
+  await signUp(alice, uniqueEmail('list-a'));
   await addFromTitlePage(alice, '/tr/title/movie/603', w.status.watching);
 
   const bob = await browser.newPage();
-  await signUpAndConfirm(bob, uniqueEmail('list-b'));
+  await signUp(bob, uniqueEmail('list-b'));
   await bob.goto('/tr/list');
   await expect(bob.getByText(tr.list.empty)).toBeVisible();
   await bob.goto('/tr/title/movie/603');
