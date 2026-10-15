@@ -176,11 +176,30 @@ isOneToOne: false
 "catalog_cache_stats":
 { Args: { "p_orphan_age"?: string }; Returns: Json
                            },
+"catalog_today":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
+"get_continue_watching":
+{ Args: { "p_limit"?: number }; Returns: {
+              "aired_count": number,"item_id": string,"last_activity_at": string,"media_type": Database["public"]['Enums']["media_type"],"next_air_date": string,"next_episode_id": number,"next_episode_name": Json,"next_episode_number": number,"next_season_number": number,"original_title": string,"poster_path": string,"title_id": number,"tmdb_id": number,"translations": Json,"watched_count": number
+            }[]
+                           },
+"get_title_progress":
+{ Args: { "p_title_id": number }; Returns: {
+              "aired_count": number,"catalog_complete": boolean,"watched_count": number
+            }[]
+                           },
+"mark_episodes_watched":
+{ Args: { "p_episode_ids": (number)[] }; Returns: number
+                           },
 "purge_rate_limits":
 { Args: { "p_older_than"?: string }; Returns: number
                            },
 "rate_limit_hit":
 { Args: { "p_bucket": string,"p_max_requests": number,"p_user_id": string,"p_window_seconds": number }; Returns: boolean
+                           },
+"unmark_episodes":
+{ Args: { "p_episode_ids": (number)[] }; Returns: number
                            }
           }
           Enums: {

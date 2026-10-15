@@ -25,3 +25,14 @@ export {
   type WatchlistItemDTO,
 } from './watchlist';
 export { AccountError, deleteAccount } from './account';
+export {
+  ProgressError,
+  getContinueWatching,
+  getTitleProgress,
+  getWatchedEpisodeIds,
+  mapContinueWatching,
+  markEpisodesWatched,
+  unmarkEpisodes,
+  type ContinueWatchingDTO,
+  type TitleProgressDTO,
+} from './progress';

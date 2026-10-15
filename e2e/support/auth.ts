@@ -29,7 +29,8 @@ export async function submitSignUp(page: Page, email: string, password = PASSWOR
  */
 export async function signUp(page: Page, email: string, password = PASSWORD) {
   await submitSignUp(page, email, password);
-  await expect(page).toHaveURL(/\/tr\/home$/);
+  // Generous: the first sign-ups of a parallel run hit a freshly started local stack.
+  await expect(page).toHaveURL(/\/tr\/home$/, { timeout: 20_000 });
 }
 
 export async function signIn(page: Page, email: string, password: string, path = '/tr/login') {

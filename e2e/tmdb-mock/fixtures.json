@@ -23,7 +23,11 @@
           "poster_path": null,
           "first_air_date": "2011-04-17"
         },
-        { "media_type": "person", "id": 6384, "name": "Örnek Oyuncu" }
+        {
+          "media_type": "person",
+          "id": 6384,
+          "name": "Örnek Oyuncu"
+        }
       ]
     },
     "en-US": {
@@ -89,9 +93,24 @@
         "status": "Ended",
         "number_of_seasons": 2,
         "seasons": [
-          { "season_number": 0, "name": "Özel Bölümler", "air_date": null, "episode_count": 1 },
-          { "season_number": 1, "name": "1. Sezon", "air_date": "2011-04-17", "episode_count": 3 },
-          { "season_number": 2, "name": "2. Sezon", "air_date": "2012-04-01", "episode_count": 2 }
+          {
+            "season_number": 0,
+            "name": "Özel Bölümler",
+            "air_date": null,
+            "episode_count": 1
+          },
+          {
+            "season_number": 1,
+            "name": "1. Sezon",
+            "air_date": "2011-04-17",
+            "episode_count": 3
+          },
+          {
+            "season_number": 2,
+            "name": "2. Sezon",
+            "air_date": "2012-04-01",
+            "episode_count": 2
+          }
         ]
       },
       "en-US": {
@@ -105,9 +124,24 @@
         "status": "Ended",
         "number_of_seasons": 2,
         "seasons": [
-          { "season_number": 0, "name": "Specials", "air_date": null, "episode_count": 1 },
-          { "season_number": 1, "name": "Season 1", "air_date": "2011-04-17", "episode_count": 3 },
-          { "season_number": 2, "name": "Season 2", "air_date": "2012-04-01", "episode_count": 2 }
+          {
+            "season_number": 0,
+            "name": "Specials",
+            "air_date": null,
+            "episode_count": 1
+          },
+          {
+            "season_number": 1,
+            "name": "Season 1",
+            "air_date": "2011-04-17",
+            "episode_count": 3
+          },
+          {
+            "season_number": 2,
+            "name": "Season 2",
+            "air_date": "2012-04-01",
+            "episode_count": 2
+          }
         ]
       }
     }
@@ -119,9 +153,24 @@
         "name": "1. Sezon",
         "air_date": "2011-04-17",
         "episodes": [
-          { "episode_number": 1, "name": "Kış Kapıda", "air_date": "2011-04-17", "runtime": 62 },
-          { "episode_number": 2, "name": "Kral Yolu", "air_date": "2011-04-24", "runtime": 56 },
-          { "episode_number": 3, "name": "Uzak Kıyı", "air_date": null, "runtime": null }
+          {
+            "episode_number": 1,
+            "name": "Kış Kapıda",
+            "air_date": "2011-04-17",
+            "runtime": 62
+          },
+          {
+            "episode_number": 2,
+            "name": "Kral Yolu",
+            "air_date": "2011-04-24",
+            "runtime": 56
+          },
+          {
+            "episode_number": 3,
+            "name": "Uzak Kıyı",
+            "air_date": null,
+            "runtime": null
+          }
         ]
       },
       "en-US": {
@@ -141,7 +190,52 @@
             "air_date": "2011-04-24",
             "runtime": 56
           },
-          { "episode_number": 3, "name": "The Far Shore", "air_date": null, "runtime": null }
+          {
+            "episode_number": 3,
+            "name": "The Far Shore",
+            "air_date": null,
+            "runtime": null
+          }
+        ]
+      }
+    },
+    "1399/2": {
+      "tr-TR": {
+        "season_number": 2,
+        "name": "2. Sezon",
+        "air_date": "2012-04-01",
+        "episodes": [
+          {
+            "episode_number": 1,
+            "name": "Yeni Kış",
+            "air_date": "2012-04-01",
+            "runtime": 55
+          },
+          {
+            "episode_number": 2,
+            "name": "Son Kale",
+            "air_date": "2012-04-08",
+            "runtime": 58
+          }
+        ]
+      },
+      "en-US": {
+        "season_number": 2,
+        "name": "Season 2",
+        "air_date": "2012-04-01",
+        "episodes": [
+          {
+            "episode_number": 1,
+            "name": "A New Winter",
+            "air_date": "2012-04-01",
+            "runtime": 55
+          },
+          {
+            "episode_number": 2,
+            "name": "The Last Keep",
+            "air_date": "2012-04-08",
+            "runtime": 58
+          }
         ]
       }
     }

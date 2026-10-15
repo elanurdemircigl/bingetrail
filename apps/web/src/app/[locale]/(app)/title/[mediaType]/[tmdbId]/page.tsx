@@ -4,11 +4,18 @@ import { getFormatter, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
-import { CatalogError, getTitleDetail, getWatchlistItemForTitle } from '@bingetrail/api-client';
-import type { MediaType } from '@bingetrail/shared';
+import {
+  CatalogError,
+  getTitleDetail,
+  getTitleProgress,
+  getWatchlistItemForTitle,
+} from '@bingetrail/api-client';
+import { shouldSuggestCompletion, toProgress, type MediaType } from '@bingetrail/shared';
 
 import { CatalogErrorNotice } from '@/components/catalog/catalog-error';
 import { Poster } from '@/components/catalog/poster';
+import { CompletionPrompt } from '@/components/progress/completion-prompt';
+import { ProgressBar } from '@/components/progress/progress-bar';
 import { WatchlistControl } from '@/components/watchlist/watchlist-control';
 import { Link } from '@/i18n/navigation';
 import { resolveLocale } from '@/i18n/page';
@@ -49,7 +56,12 @@ export default async function TitlePage({ params }: { params: Params }) {
   if (!result.detail) return <CatalogErrorNotice code={result.error} />;
 
   const title = result.detail;
-  const entry = await getWatchlistItemForTitle(await createClient(), title.id, locale);
+  const supabase = await createClient();
+  const [entry, progress] = await Promise.all([
+    getWatchlistItemForTitle(supabase, title.id, locale),
+    title.mediaType === 'tv' ? getTitleProgress(supabase, title.id) : null,
+  ]);
+  const tp = await getTranslations('progress');
   const t = await getTranslations('catalog');
   const format = await getFormatter();
   const status = statusKey(title.status);
@@ -84,6 +96,23 @@ export default async function TitlePage({ params }: { params: Params }) {
         </dl>
 
         <p className="leading-relaxed">{title.overview ?? t('overviewMissing')}</p>
+
+        {progress && progress.airedCount > 0 && (
+          <section className="flex flex-col gap-2">
+            <ProgressBar
+              progress={toProgress(progress.airedCount, progress.watchedCount)}
+              label={tp('barLabel')}
+              text={tp('bar', { watched: progress.watchedCount, aired: progress.airedCount })}
+              testId="title-progress"
+            />
+            {!progress.catalogComplete && progress.watchedCount > 0 && (
+              <p className="text-ink-muted text-xs">{tp('incompleteCache')}</p>
+            )}
+          </section>
+        )}
+        {entry && progress && shouldSuggestCompletion({ status: entry.status, ...progress }) && (
+          <CompletionPrompt itemId={entry.id} />
+        )}
 
         <WatchlistControl
           // Remount after add/remove so local form state starts from the server copy.

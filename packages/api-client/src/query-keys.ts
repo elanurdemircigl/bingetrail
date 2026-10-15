@@ -28,4 +28,10 @@ export const queryKeys = {
     counts: () => [...root, 'watchlist', 'counts'] as const,
     forTitle: (titleId: number) => [...root, 'watchlist', 'title', titleId] as const,
   },
+  progress: {
+    all: [...root, 'progress'] as const,
+    title: (titleId: number) => [...root, 'progress', 'title', titleId] as const,
+    continueWatching: (locale: CatalogLocale) =>
+      [...root, 'progress', 'continue-watching', locale] as const,
+  },
 } as const;

@@ -16,8 +16,8 @@ insert into auth.users (id, email) values
 insert into public.titles (tmdb_id, media_type, original_title) values (992001, 'tv', 'Deletion Show');
 insert into public.seasons (title_id, season_number)
 select id, 1 from public.titles where tmdb_id = 992001;
-insert into public.episodes (season_id, title_id, season_number, episode_number)
-select s.id, s.title_id, 1, 1 from public.seasons s join public.titles t on t.id = s.title_id
+insert into public.episodes (season_id, title_id, season_number, episode_number, air_date)
+select s.id, s.title_id, 1, 1, current_date - 1 from public.seasons s join public.titles t on t.id = s.title_id
 where t.tmdb_id = 992001;
 
 insert into public.watchlist_items (user_id, title_id, notes)

@@ -95,8 +95,7 @@
   "pages": {
     "home": {
       "title": "Home",
-      "welcome": "Welcome!",
-      "body": "Series you are watching will show up here."
+      "welcome": "Welcome!"
     },
     "search": {
       "title": "Search"
@@ -257,5 +256,41 @@
       "body": "Your account and personal data have been permanently deleted. Thank you for using BingeTrail.",
       "home": "Back to the start page"
     }
+  },
+  "progress": {
+    "barLabel": "Watching progress",
+    "bar": "{watched}/{aired} episodes watched",
+    "seasonBar": "This season: {watched}/{aired} episodes watched",
+    "incompleteCache": "Some seasons are not loaded yet; progress is based on the seasons you have opened.",
+    "watched": "Watched",
+    "watchedLabel": "Episode {number} watched",
+    "notAired": "Not aired yet",
+    "markSeason": "Mark season as watched",
+    "unmarkSeason": "Clear season",
+    "markUpTo": "Up to here",
+    "markUpToLabel": "Mark episodes up to {number} as watched",
+    "saving": "Saving…",
+    "completeSuggestion": "You have watched every aired episode. Mark it as completed?",
+    "completeYes": "Mark as completed",
+    "completeDismiss": "Not now",
+    "errors": {
+      "episode_not_aired": "Episodes that have not aired yet cannot be marked.",
+      "episode_not_found": "Episode not found. Refresh the page.",
+      "too_many_episodes": "At most 2000 episodes can be marked at once.",
+      "unexpected": "Something went wrong. Please try again."
+    }
+  },
+  "continueWatching": {
+    "heading": "Continue watching",
+    "empty": "You are not watching anything right now. Mark episodes of a series and it shows up here.",
+    "searchLink": "Find something to watch",
+    "next": "Season {season} · Episode {episode}",
+    "markNext": "Watched",
+    "markNextLabel": "{title}: mark season {season} episode {episode} as watched",
+    "upToDate": "You have watched every aired episode.",
+    "noNextCached": "Open the seasons to see the next episode.",
+    "movie": "Movie",
+    "seasonsLink": "Seasons",
+    "progress": "{watched}/{aired} episodes"
   }
 }

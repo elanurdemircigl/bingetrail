@@ -16,8 +16,8 @@ insert into public.titles (tmdb_id, media_type, original_title)
 values (991001, 'tv', 'RLS Show'), (991002, 'tv', 'RLS Show 2');
 insert into public.seasons (title_id, season_number)
 select id, 1 from public.titles where tmdb_id in (991001, 991002);
-insert into public.episodes (season_id, title_id, season_number, episode_number)
-select s.id, s.title_id, 1, n
+insert into public.episodes (season_id, title_id, season_number, episode_number, air_date)
+select s.id, s.title_id, 1, n, current_date - 1
 from public.seasons s join public.titles t on t.id = s.title_id, generate_series(1, 2) n
 where t.tmdb_id in (991001, 991002);
 

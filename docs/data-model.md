@@ -63,6 +63,20 @@ Migration `20261015140000_watchlist_consistency.sql` (ileri yönlü; eski migrat
 
 Aynı kurallar istemcide `applyStatusChange` (`packages/shared/src/watchlist.ts`) ile uygulanır: `planned` iki tarihi de temizler, `watching`/`completed` var olan başlangıç tarihini korur, `paused`/`dropped` başlangıcı korur ve bitişi temizler. pgTAP: `03_watchlist_consistency.test.sql`.
 
+## Faz 5 eklemeleri
+
+Migration `20261016090000_episode_progress.sql` ([ADR-0005](adr/0005-episode-progress.md)):
+
+| Nesne                                  | Amaç                                                                                                | Erişim                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------ |
+| `mark_episodes_watched(bigint[])`      | Yayınlanmış bölümleri tek çağrıda işaretler (≤ 2000); başlığı listeye alır / "İzleniyor" yapar      | `authenticated`, INVOKER |
+| `unmark_episodes(bigint[])`            | İşaretleri kaldırır (≤ 2000)                                                                        | `authenticated`, INVOKER |
+| `get_continue_watching(limit)`         | "İzleniyor" başlıkları + sıradaki bölüm + sayılar, tek sorgu                                        | `authenticated`, INVOKER |
+| `get_title_progress(title_id)`         | Yayınlanan / izlenen bölüm sayısı, önbellek tam mı                                                  | `authenticated`, INVOKER |
+| `catalog_today()`                      | UTC takvim günü                                                                                     | `authenticated`          |
+| `episode_progress_guard` (tetikleyici) | Yayınlanmamış bölümün her yoldan işaretlenmesini engeller; gelecekteki `watched_at`'i şimdiye çeker | Bütün yazıcılar          |
+| `episodes_title_order_idx`             | `(title_id, season_number, episode_number) include (air_date)`: sıradaki bölüm ve sayımlar          | —                        |
+
 ## Önemli tasarım kararları
 
 - **Bütünlük için birleşik FK'ler:** `episodes (season_id, title_id) → seasons (id, title_id)` ve `episode_progress (episode_id, title_id) → episodes (id, title_id)`. Böylece bir bölüm ile bağlı olduğu başlık birbiriyle çelişemez.

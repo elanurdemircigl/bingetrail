@@ -64,7 +64,11 @@ type ItemRow = {
 };
 
 /** Localized title text: requested locale, then any cached locale, then the original. */
-function localizedTitle(translations: Json, locale: CatalogLocale, original: string): string {
+export function localizedTitle(
+  translations: Json,
+  locale: CatalogLocale,
+  original: string,
+): string {
   if (!translations || typeof translations !== 'object' || Array.isArray(translations))
     return original;
   const entries = translations as Record<string, { title?: unknown } | undefined>;

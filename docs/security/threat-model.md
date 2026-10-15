@@ -1,6 +1,6 @@
 # Tehdit Modeli
 
-> Sahibi: SEC · Sürüm: **v4 (Faz 4)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
+> Sahibi: SEC · Sürüm: **v5 (Faz 5)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
 
 ## Kapsam
 
@@ -152,3 +152,13 @@
 | Kayıt ekranında hesap varlığının anlaşılması | **Kabul edildi.** Otomatik giriş yapan kayıtta gizlenemez; `emailTaken` mesajı. Giriş ve parola sıfırlama yanıtları hâlâ aynı (E2E)    |
 | Başkasının e-posta adresiyle hesap açmak     | **Kabul edildi.** Adresin gerçek sahibi parola sıfırlama ile hesabı ele geçirebilir; sıfırlama bağlantısı yalnızca gerçek adrese gider |
 | Otomatik hesap açma (spam/bot)               | Supabase Auth hız sınırları (`[auth.rate_limit]`). CAPTCHA ihtiyacı Faz 10'da yeniden değerlendirilecek                                |
+
+## Faz 5 eki: bölüm takibi (v5)
+
+| Tehdit                     | Örnek                                                            | Önlem                                                                                                     | Kanıt                                                  |
+| -------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **E**levation of privilege | RPC ile başka kullanıcının ilerlemesini okumak ya da değiştirmek | Bütün fonksiyonlar SECURITY INVOKER, boş `search_path`; RLS sahipliği uygular; anon `execute` yetkisi yok | `progress_isolation.test.sql` + pgTAP + E2E (anon 401) |
+| **T**ampering              | Yayınlanmamış bölümü doğrudan tabloya yazmak                     | `episode_progress_guard` tetikleyicisi her yazma yolunda; RPC de kontrol eder                             | pgTAP (doğrudan insert) + E2E (doğrudan RPC)           |
+| **D**enial of service      | Çok büyük dizilerle veritabanını yormak                          | Çağrı başına ≤ 2000 id (RPC + Zod); `get_continue_watching` ≤ 50 sonuç, tek sorgu, indeksli               | pgTAP (2001 reddediliyor) + ölçüm (ADR-0005)           |
+| **T**ampering              | Geleceğe tarihli `watched_at`                                    | Tetikleyici `least(watched_at, now())`                                                                    | Kod incelemesi                                         |
+| **I**nformation disclosure | Hata mesajlarıyla iç ayrıntı sızdırmak                           | Yalnızca bilinen kodlar UI'a çıkar; diğer her şey `unexpected`                                            | api-client birim testleri                              |

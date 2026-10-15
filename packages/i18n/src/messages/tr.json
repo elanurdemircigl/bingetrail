@@ -95,8 +95,7 @@
   "pages": {
     "home": {
       "title": "Ana sayfa",
-      "welcome": "Hoş geldin!",
-      "body": "Devam ettiğin diziler burada görünecek."
+      "welcome": "Hoş geldin!"
     },
     "search": {
       "title": "Ara"
@@ -257,5 +256,41 @@
       "body": "Hesabın ve kişisel verilerin kalıcı olarak silindi. BingeTrail’i kullandığın için teşekkürler.",
       "home": "Başlangıç sayfasına dön"
     }
+  },
+  "progress": {
+    "barLabel": "İzleme ilerlemesi",
+    "bar": "{watched}/{aired} bölüm izlendi",
+    "seasonBar": "Bu sezon: {watched}/{aired} bölüm izlendi",
+    "incompleteCache": "Bazı sezonların bölümleri henüz yüklenmedi; ilerleme açtığın sezonlara göre hesaplanıyor.",
+    "watched": "İzlendi",
+    "watchedLabel": "{number}. bölüm izlendi",
+    "notAired": "Henüz yayınlanmadı",
+    "markSeason": "Sezonu izlendi işaretle",
+    "unmarkSeason": "Sezon işaretlerini kaldır",
+    "markUpTo": "Buraya kadar",
+    "markUpToLabel": "{number}. bölüme kadar izlendi işaretle",
+    "saving": "Kaydediliyor…",
+    "completeSuggestion": "Yayınlanan tüm bölümleri izledin. Tamamlandı olarak işaretlensin mi?",
+    "completeYes": "Tamamlandı olarak işaretle",
+    "completeDismiss": "Şimdi değil",
+    "errors": {
+      "episode_not_aired": "Henüz yayınlanmamış bölümler işaretlenemez.",
+      "episode_not_found": "Bölüm bulunamadı. Sayfayı yenile.",
+      "too_many_episodes": "Tek seferde en fazla 2000 bölüm işaretlenebilir.",
+      "unexpected": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    }
+  },
+  "continueWatching": {
+    "heading": "İzlemeye devam et",
+    "empty": "Şu an izlediğin bir şey yok. Bir dizinin bölümlerini işaretlediğinde burada görünür.",
+    "searchLink": "İzleyecek bir şey bul",
+    "next": "{season}. Sezon {episode}. Bölüm",
+    "markNext": "İzledim",
+    "markNextLabel": "{title}: {season}. sezon {episode}. bölümü izlendi işaretle",
+    "upToDate": "Yayınlanan tüm bölümleri izledin.",
+    "noNextCached": "Sıradaki bölümü görmek için sezonları aç.",
+    "movie": "Film",
+    "seasonsLink": "Sezonlar",
+    "progress": "{watched}/{aired} bölüm"
   }
 }

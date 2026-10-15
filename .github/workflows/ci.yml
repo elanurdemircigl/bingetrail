@@ -93,7 +93,7 @@ jobs:
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: E2E (auth, access control, i18n, catalog, watchlist, account deletion)
+      - name: E2E (auth, access control, i18n, catalog, watchlist, episode tracking, account deletion)
         run: pnpm run test:e2e
 
       - name: Upload Playwright report

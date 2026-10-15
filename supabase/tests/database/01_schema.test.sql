@@ -103,8 +103,9 @@ values (990001, 'tv', 'Schema Test Show'), (990002, 'tv', 'Other Show'), (990003
 insert into public.seasons (title_id, season_number)
 select id, 1 from public.titles where tmdb_id in (990001, 990002, 990003);
 
-insert into public.episodes (season_id, title_id, season_number, episode_number)
-select s.id, s.title_id, 1, 1 from public.seasons s
+-- Aired episodes: unaired ones cannot be marked as watched (Faz 5 guard).
+insert into public.episodes (season_id, title_id, season_number, episode_number, air_date)
+select s.id, s.title_id, 1, 1, current_date - 1 from public.seasons s
 join public.titles t on t.id = s.title_id where t.tmdb_id in (990001, 990002, 990003);
 
 -- ---------------------------------------------------------------------------

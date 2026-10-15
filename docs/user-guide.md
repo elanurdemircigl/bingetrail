@@ -49,3 +49,27 @@ Durumu başlık sayfasından ya da **Listem** sayfasındaki her satırdan deği�
 - Parola yanlışsa hiçbir şey silinmez. Güvenlik için saatte en fazla 5 deneme yapılabilir.
 - Silme tamamlanınca bu cihazdaki oturumun kapanır ve bir onay sayfası görürsün. Aynı e-posta ve parolayla artık giriş yapılamaz.
 - Filmler ve diziler hakkındaki ortak katalog bilgisi (TMDB'den) kişisel veri değildir ve silinmez.
+
+## Bölüm takibi
+
+### Bölüm işaretlemek
+
+1. Bir dizinin sayfasında sezonu aç.
+2. Bölümün yanındaki kutuyu işaretle. Kutuyu kaldırırsan işaret silinir.
+3. **Buraya kadar:** O sezonda bu bölüme kadar yayınlanmış bütün bölümleri tek seferde işaretler.
+4. **Sezonu izlendi işaretle / Sezon işaretlerini kaldır:** Bütün sezon için.
+
+- **Henüz yayınlanmamış** (ya da yayın tarihi bilinmeyen) bölümler işaretlenemez.
+- Bir dizinin bölümünü işaretlediğinde dizi listende yoksa **İzleniyor** olarak eklenir; **İzlenecek** ise **İzleniyor**'a geçer. Ara verdiğin, bıraktığın ya da tamamladığın dizilerin durumu değişmez.
+- Sezon sayfasında ve dizi sayfasında ilerleme çubuğu, yayınlanan bölümlerin kaçını izlediğini gösterir.
+
+### Tamamlandı önerisi
+
+Yayınlanan bütün bölümleri izlediğinde dizi sayfasında **"Tamamlandı olarak işaretlensin mi?"** sorusu çıkar. Durum kendiliğinden değişmez; **Tamamlandı olarak işaretle** ya da **Şimdi değil** seç.
+
+### İzlemeye devam et
+
+Ana sayfada **İzleniyor** durumundaki diziler son etkinliğe göre sıralanır. Her kartta sıradaki bölüm yazar: son izlediğin bölümden sonraki ilk yayınlanmış bölüm. **İzledim** düğmesi o bölümü işaretler ve bir sonrakine geçer.
+
+- Özel bölümler (Sezon 0) burada gösterilmez.
+- Sıradaki bölüm henüz açılmamış bir sezondaysa kart seni sezonlara yönlendirir; sezonu bir kez açman yeterli.

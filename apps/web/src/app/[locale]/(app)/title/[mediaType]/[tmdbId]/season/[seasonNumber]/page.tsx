@@ -4,9 +4,16 @@ import { getFormatter, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
-import { CatalogError, getSeasonDetail, getTitleDetail } from '@bingetrail/api-client';
+import {
+  CatalogError,
+  getSeasonDetail,
+  getTitleDetail,
+  getWatchedEpisodeIds,
+} from '@bingetrail/api-client';
+import { utcToday } from '@bingetrail/shared';
 
 import { CatalogErrorNotice } from '@/components/catalog/catalog-error';
+import { EpisodeList } from '@/components/progress/episode-list';
 import { Link } from '@/i18n/navigation';
 import { resolveLocale } from '@/i18n/page';
 import { dateFromIso, seasonParamsSchema } from '@/lib/catalog';
@@ -46,6 +53,7 @@ export default async function SeasonPage({ params }: { params: Params }) {
   if (!result.season) return <CatalogErrorNotice code={result.error} />;
 
   const { show, season } = result;
+  const watchedIds = await getWatchedEpisodeIds(await createClient(), season.titleId);
   const t = await getTranslations('catalog');
   const format = await getFormatter();
 
@@ -63,31 +71,27 @@ export default async function SeasonPage({ params }: { params: Params }) {
         <h2 id="episodes-heading" className="text-xl font-semibold">
           {t('episodes')}
         </h2>
-        <ol className="flex flex-col gap-2">
-          {season.episodes.map((episode) => (
-            <li
-              key={episode.id}
-              data-testid="episode"
-              className="bg-surface-raised flex flex-wrap items-baseline justify-between gap-2 rounded-lg px-4 py-3"
-            >
-              <span>
-                <span className="text-ink-muted mr-2 text-sm">
-                  {t('episodeNumber', { number: episode.episodeNumber })}
-                </span>
-                <span className="font-medium">{episode.name}</span>
-              </span>
-              <span className="text-ink-muted text-sm">
-                {episode.airDate
-                  ? format.dateTime(dateFromIso(episode.airDate), {
-                      dateStyle: 'medium',
-                      timeZone: 'UTC',
-                    })
-                  : t('dateUnknown')}
-                {episode.runtime !== null && ` · ${t('runtime', { minutes: episode.runtime })}`}
-              </span>
-            </li>
-          ))}
-        </ol>
+        <EpisodeList
+          episodes={season.episodes.map((episode) => ({
+            id: episode.id,
+            episodeNumber: episode.episodeNumber,
+            name: episode.name,
+            airDate: episode.airDate,
+            meta: [
+              episode.airDate
+                ? format.dateTime(dateFromIso(episode.airDate), {
+                    dateStyle: 'medium',
+                    timeZone: 'UTC',
+                  })
+                : t('dateUnknown'),
+              episode.runtime !== null ? t('runtime', { minutes: episode.runtime }) : null,
+            ]
+              .filter(Boolean)
+              .join(' · '),
+          }))}
+          watchedIds={[...watchedIds]}
+          today={utcToday()}
+        />
       </section>
     </article>
   );
