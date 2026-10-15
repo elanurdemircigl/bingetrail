@@ -56,3 +56,4 @@ export {
   type Progress,
   type ProgressErrorCode,
 } from './progress';
+export { toAuthErrorCode } from './auth-errors';

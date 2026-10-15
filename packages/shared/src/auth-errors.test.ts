@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { toAuthErrorCode } from './errors';
+import { toAuthErrorCode } from './index';
 
 describe('toAuthErrorCode', () => {
   it.each([

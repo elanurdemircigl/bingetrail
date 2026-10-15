@@ -1,4 +1,4 @@
-import type { AuthErrorCode } from '@bingetrail/shared';
+import type { AuthErrorCode } from './auth';
 
 type SupabaseAuthError =
   { code?: string | undefined; status?: number | undefined } | null | undefined;

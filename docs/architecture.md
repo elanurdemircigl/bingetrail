@@ -1,6 +1,6 @@
 # Mimari
 
-> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 5.
+> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 6.
 
 ## Bileşenler
 
@@ -34,12 +34,12 @@ Supabase: PostgreSQL + RLS · Auth · Storage · Realtime · Edge Functions (tmd
 
 Paylaşılan paketlerdeki yasaklar ESLint (`no-restricted-imports`) ile zorunlu tutulur.
 
-## Güncel durum (Faz 5)
+## Güncel durum (Faz 6)
 
 | Bileşen               | Durum                                                                                                                                                                                                                                                                                                                                                                                                            |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `apps/web`            | next-intl, auth (recovery işaretli parola sıfırlama), arama / başlık / sezon sayfaları, TMDB atfı, izleme listesi (Server Actions + `useOptimistic`, filtreler URL'de), bölüm takibi ve ana sayfada Continue Watching ([ADR-0005](adr/0005-episode-progress.md)), iki adımlı hesap silme ([auth](auth.md), [ADR-0002](adr/0002-web-auth.md), [ADR-0003](adr/0003-catalog.md), [ADR-0004](adr/0004-watchlist.md)) |
-| `apps/mobile`         | Tek ekranlı Expo Router iskeleti, NativeWind (özellikler Faz 6)                                                                                                                                                                                                                                                                                                                                                  |
+| `apps/mobile`         | Expo Router: auth, arama, başlık/sezon, liste, bölüm takibi, İzlemeye devam et, profil, hesap silme; TanStack Query + `api-client`; şifreli oturum ([mobile](mobile.md), [ADR-0006](adr/0006-mobile.md))                                                                                                                                                                                                         |
 | `packages/shared`     | Auth Zod şemaları, hata kodları, katalog ve hesap sözleşmeleri (`contracts/`, Edge Function'lara senkronlanır), izleme listesi kuralları (`applyStatusChange`, puan/not şemaları), hesap silme formu                                                                                                                                                                                                             |
 | `packages/api-client` | `queryKeys` (profil, katalog, liste, ilerleme), bölüm ilerlemesi (`markEpisodesWatched`, `getContinueWatching`, …), profil, katalog, izleme listesi (`getWatchlist`, `addToWatchlist`, …) ve `deleteAccount`                                                                                                                                                                                                     |
 | `packages/i18n`       | TR/EN mesajları (auth, nav, doğrulama, hatalar, profil, katalog, liste, hesap)                                                                                                                                                                                                                                                                                                                                   |

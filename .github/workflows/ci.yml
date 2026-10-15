@@ -90,6 +90,11 @@ jobs:
       - name: Secret bundle guard + public env check (with real public env)
         run: pnpm run security:check:local
 
+      # Mobile: bundle the Expo app (plain JS, no Hermes bytecode) with the same
+      # public local settings and scan it like the web bundle (Faz 6).
+      - name: Mobile bundle + secret bundle guard
+        run: pnpm run export:mobile:local && pnpm run security:check:mobile
+
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
 

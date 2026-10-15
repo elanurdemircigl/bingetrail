@@ -60,7 +60,11 @@
       "password": "Yeni parola",
       "confirmPassword": "Yeni parola (tekrar)",
       "submit": "Parolayı kaydet",
-      "submitting": "Kaydediliyor…"
+      "submitting": "Kaydediliyor…",
+      "codeHelp": "E-postadaki bağlantıya bu telefonda dokun ya da e-postadaki 6 haneli kodu e-posta adresinle birlikte buraya gir.",
+      "code": "6 haneli kod",
+      "codeInvalid": "E-postadaki 6 haneli kodu gir.",
+      "verify": "Kodu doğrula"
     },
     "checkEmail": {
       "title": "E-postanı kontrol et",

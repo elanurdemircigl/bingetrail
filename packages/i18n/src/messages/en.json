@@ -60,7 +60,11 @@
       "password": "New password",
       "confirmPassword": "Confirm new password",
       "submit": "Save password",
-      "submitting": "Saving…"
+      "submitting": "Saving…",
+      "codeHelp": "Tap the link in the email on this phone, or enter the 6-digit code from the email together with your email address.",
+      "code": "6-digit code",
+      "codeInvalid": "Enter the 6-digit code from the email.",
+      "verify": "Verify code"
     },
     "checkEmail": {
       "title": "Check your email",

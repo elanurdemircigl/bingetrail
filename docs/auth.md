@@ -57,14 +57,14 @@ pnpm test:e2e          # Playwright (önce build:web:local)
 
 1. **Authentication → URL Configuration**
    - Site URL: production adresin (ör. `https://bingetrail.example`).
-   - Redirect URLs: `https://bingetrail.example/**`. Gerekirse preview adreslerini de ekle.
+   - Redirect URLs: `https://bingetrail.example/**` ve mobil için **yalnızca** `bingetrail://reset-password`. Gerekirse preview adreslerini de ekle. `exp://` ekleme.
 2. **Authentication → Sign In / Providers → Email**
    - Confirm email: **kapalı** (yerel `config.toml` ile aynı olmalı; aşağıdaki karara bakınız)
    - Secure password change: **açık**
    - Minimum password length: **8**, Password requirements: **letters and digits**
    - Leaked password protection: **açık** (planın destekliyorsa)
 3. **Authentication → Email Templates**
-   - "Reset password" (ve doğrulama ileride açılırsa "Confirm signup") şablonlarına `supabase/templates/confirmation.html` ve `recovery.html` dosyalarının içeriğini yapıştır.
+   - "Reset password" şablonu **iki dallı** (web bağlantısı / mobil PKCE bağlantısı + 6 haneli kod; [mobile.md](mobile.md)). "Reset password" (ve doğrulama ileride açılırsa "Confirm signup") şablonlarına `supabase/templates/confirmation.html` ve `recovery.html` dosyalarının içeriğini yapıştır.
    - Bağlantılar `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=…` biçiminde olmalı.
 4. **Authentication → SMTP:** Production için kendi SMTP sağlayıcını tanımla. Supabase'in yerleşik e-posta servisi saatte çok az e-posta gönderebiliyor.
 5. **Web uygulaması ortam değişkenleri** (hosting paneli veya `apps/web/.env.local`):
@@ -93,3 +93,7 @@ Depo sahibinin isteğiyle kayıt olan kullanıcı e-postasını doğrulamadan he
   - **Kayıtta hesap varlığı anlaşılabilir.** Kayıtlı bir adresle kayıt denendiğinde "Bu e-posta adresi zaten kayıtlı" mesajı gösterilir. Başarılı kayıt kullanıcıyı içeri aldığı için bu durum zaten gizlenemezdi. Giriş ve parola sıfırlama ekranları hesap varlığını hâlâ ele vermez.
   - **E-posta sahipliği kanıtlanmaz.** Biri başkasının adresiyle hesap açabilir. Adresin gerçek sahibi "Parolamı unuttum" ile hesabı ele geçirebilir. Parola sıfırlama e-postası gerçek adrese gittiği için başkası bu yolla hesaba giremez.
   - Bu adreslere sıfırlama e-postası gönderilebilmesi için production'da SMTP ayarı yine gerekir.
+
+## Mobil (Faz 6)
+
+Mobil uygulama aynı Supabase Auth'u supabase-js ile kullanır (PKCE). Kayıt, giriş ve hata kodları web ile aynıdır (`packages/shared` şemaları ve `toAuthErrorCode`). Parola sıfırlama için bkz. [mobile.md](mobile.md#parola-sıfırlama-mobil): bağlantı (PKCE) ya da e-postadaki 6 haneli kod; yeni parola formu yalnızca doğrulamadan sonra açılır.

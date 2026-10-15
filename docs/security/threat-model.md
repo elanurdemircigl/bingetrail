@@ -1,6 +1,6 @@
 # Tehdit Modeli
 
-> Sahibi: SEC · Sürüm: **v5 (Faz 5)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
+> Sahibi: SEC · Sürüm: **v6 (Faz 6)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
 
 ## Kapsam
 
@@ -162,3 +162,21 @@
 | **D**enial of service      | Çok büyük dizilerle veritabanını yormak                          | Çağrı başına ≤ 2000 id (RPC + Zod); `get_continue_watching` ≤ 50 sonuç, tek sorgu, indeksli               | pgTAP (2001 reddediliyor) + ölçüm (ADR-0005)           |
 | **T**ampering              | Geleceğe tarihli `watched_at`                                    | Tetikleyici `least(watched_at, now())`                                                                    | Kod incelemesi                                         |
 | **I**nformation disclosure | Hata mesajlarıyla iç ayrıntı sızdırmak                           | Yalnızca bilinen kodlar UI'a çıkar; diğer her şey `unexpected`                                            | api-client birim testleri                              |
+
+## Faz 6 eki: mobil (v6)
+
+| Tehdit                     | Örnek                                                           | Önlem                                                                                                                                | Kanıt                                         |
+| -------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
+| **I**nformation disclosure | Cihazdan ya da yedekten oturum token'ı okumak                   | Oturum AES-256 ile şifreli (AsyncStorage); anahtar SecureStore'da, `WHEN_UNLOCKED_THIS_DEVICE_ONLY` (yedeğe girmez)                  | jest: yalnızca şifreli metin + 64 hex anahtar |
+| **S**poofing               | Parola sıfırlama deep link'ini başka bir uygulamanın yakalaması | PKCE: kod yalnızca isteği yapan cihazdaki doğrulayıcıyla takas edilir; izin listesinde tek tam adres (`bingetrail://reset-password`) | Auth + Mailpit ile elle doğrulandı; jest      |
+| **S**poofing               | Sıfırlama kodunun tekrar kullanılması                           | Supabase OTP tek kullanımlık, 1 saat                                                                                                 | Doğrulama: ikinci kullanım 403                |
+| **E**levation of privilege | Normal oturumla parola değiştirmek                              | Yeni parola formu yalnızca bağlantı/kod doğrulamasından sonra (ekran içi durum)                                                      | jest (ResetPasswordScreen)                    |
+| **I**nformation disclosure | Mobil pakette secret                                            | Yalnızca `EXPO_PUBLIC_*` public değerler; `env.ts` secret anahtarla çalışmayı reddeder; paket bundle-guard'dan geçer                 | CI: `security:check:mobile`                   |
+| **I**nformation disclosure | Hesap değişince önceki kullanıcının önbelleği                   | Giriş/çıkışta TanStack önbelleği tamamen temizlenir                                                                                  | Kod incelemesi                                |
+
+### Kabul edilen riskler (Faz 6)
+
+| Risk                                    | Gerekçe                                                                                                                                                             |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `aes-js` 3.1.2 eski bir paket           | Küçük, bağımlılıksız, Supabase'in Expo rehberinde önerilen; yalnızca CTR + yardımcılar kullanılıyor. Faz 10'da `expo-crypto` AES API'si olgunlaşırsa değiştirilecek |
+| Expo Go'da sıfırlama bağlantısı açılmaz | Kod yolu var; standalone build'de bağlantı çalışır                                                                                                                  |

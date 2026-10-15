@@ -2,7 +2,7 @@
 
 Film ve dizi takip uygulaması: web (Next.js) ve mobil (Expo), Supabase backend.
 
-> **Durum: Faz 5 — Bölüm takibi ve Continue Watching.** Bölüm/sezon/"buraya kadar" işaretleme, ilerleme çubukları, tamamlama önerisi ve ana sayfada "İzlemeye devam et" eklendi. Öncesi: Web'de kimlik doğrulama, TR/EN, film/dizi arama ve detay (`tmdb` Edge Function, önbellekli), izleme listesi (5 durum, 1–10 puan, kişisel notlar, filtre ve sıralama) ve kalıcı hesap silme (`delete-account` Edge Function) çalışıyor. Mobil hâlâ iskelet (Faz 6). Kullanım: [docs/user-guide.md](docs/user-guide.md)
+> **Durum: Faz 6 — Mobil çekirdek.** Expo uygulaması web ile aynı akışları sunuyor: hesap, arama, liste, bölüm takibi, İzlemeye devam et, hesap silme, TR/EN ([docs/mobile.md](docs/mobile.md)). Faz 5: Bölüm/sezon/"buraya kadar" işaretleme, ilerleme çubukları, tamamlama önerisi ve ana sayfada "İzlemeye devam et" eklendi. Öncesi: Web'de kimlik doğrulama, TR/EN, film/dizi arama ve detay (`tmdb` Edge Function, önbellekli), izleme listesi (5 durum, 1–10 puan, kişisel notlar, filtre ve sıralama) ve kalıcı hesap silme (`delete-account` Edge Function) çalışıyor. Kullanım: [docs/user-guide.md](docs/user-guide.md)
 > Yol haritası: [plan.md](plan.md) · Faz dizini: [fazlar/](fazlar/README.md)
 
 ## Gereksinimler
@@ -33,7 +33,7 @@ Yerel geliştirmede `.env.local` **gerekmez**: `dev:web`, `build:web:local` ve `
 | Komut                                     | Ne yapar                                                                                               |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `pnpm dev:web`                            | Web geliştirme sunucusu, yerel Supabase ile → http://localhost:3000                                    |
-| `pnpm --filter @bingetrail/mobile start`  | Expo geliştirme sunucusu (QR kodu Expo Go ile tara)                                                    |
+| `pnpm dev:mobile`                         | Expo, yerel Supabase ile (LAN IP); QR kodu Expo Go ile tara → [docs/mobile.md](docs/mobile.md)         |
 | `pnpm lint`                               | Bütün paketlerde ESLint                                                                                |
 | `pnpm typecheck`                          | Bütün paketlerde (Expo dahil) TypeScript + kök tooling                                                 |
 | `pnpm test`                               | Bütün paketlerde Vitest                                                                                |
@@ -60,7 +60,7 @@ Yerel geliştirmede `.env.local` **gerekmez**: `dev:web`, `build:web:local` ve `
 
 ```
 apps/web        Next.js App Router (web)
-apps/mobile     Expo + Expo Router (Faz 6'ya kadar yalnızca iskelet)
+apps/mobile     Expo + Expo Router (mobil çekirdek, Faz 6)
 packages/       shared · api-client · i18n · db-types · config
 supabase/       migration'lar · pgTAP testleri · seed · config.toml
 tooling/        güvenlik tarayıcıları

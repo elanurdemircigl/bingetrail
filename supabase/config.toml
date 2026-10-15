@@ -161,12 +161,16 @@ site_url = "http://localhost:3000"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-# Local dev server (3000) and the Playwright production server (3100) only.
+# Local dev server (3000), the Playwright production server (3100) and the mobile
+# app. Mobile always asks for bingetrail://reset-password: in dev/standalone builds
+# the link opens the app; in Expo Go (no custom scheme) the emailed code is used.
+# Supabase Auth rejects IP-host redirects, so exp://<LAN IP> could not work anyway.
 additional_redirect_urls = [
   "http://localhost:3000/**",
   "http://127.0.0.1:3000/**",
   "http://localhost:3100/**",
   "http://127.0.0.1:3100/**",
+  "bingetrail://reset-password",
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600

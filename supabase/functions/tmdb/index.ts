@@ -37,7 +37,8 @@ const handler = createHandler({
     return data === true;
   },
   tmdb: createTmdbApi({
-    baseUrl: Deno.env.get('TMDB_API_BASE_URL') ?? 'https://api.themoviedb.org/3',
+    // Empty (as in .env.example) means the real API.
+    baseUrl: Deno.env.get('TMDB_API_BASE_URL')?.trim() || 'https://api.themoviedb.org/3',
     token: requireEnv('TMDB_API_READ_ACCESS_TOKEN'),
   }),
   store: createCatalogStore(admin),

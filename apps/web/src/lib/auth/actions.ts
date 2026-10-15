@@ -12,6 +12,7 @@ import {
   resetPasswordSchema,
   signInSchema,
   signUpSchema,
+  toAuthErrorCode,
   type AuthErrorCode,
 } from '@bingetrail/shared';
 
@@ -19,8 +20,6 @@ import { RECOVERY_COOKIE } from '@/lib/auth/recovery';
 import { getSessionUser, isRecoverySession } from '@/lib/auth/session';
 import { safeRedirectPath } from '@/lib/safe-redirect';
 import { createClient } from '@/lib/supabase/server';
-
-import { toAuthErrorCode } from './errors';
 
 // Server Actions are public endpoints: every input is re-validated here even
 // though the forms validate with the same Zod schemas on the client.

@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useId, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
 import {
@@ -43,13 +43,13 @@ export function DetailsForm({
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(detailsSchema),
     defaultValues: { rating, notes: notes ?? '' },
   });
-  const noteLength = (watch('notes') ?? '').length;
+  const noteLength = (useWatch({ control, name: 'notes' }) ?? '').length;
   const notesError = errors.notes?.message;
   const ratingError = errors.rating?.message;
 

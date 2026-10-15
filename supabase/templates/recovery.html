@@ -2,6 +2,14 @@
 <html>
   <body style="font-family: system-ui, sans-serif; color: #16161f">
     <h2>BingeTrail</h2>
+    <!--
+      Web requests (redirect to the http(s) site) verify the token on our server
+      at /auth/confirm. Mobile requests (redirect to bingetrail://reset-password)
+      get Supabase's PKCE link, which only the device that asked for the reset
+      can exchange (a hijacked deep link is useless), plus the one-time code for
+      Expo Go, which cannot open custom-scheme links.
+    -->
+    {{ if and (ge (len .RedirectTo) 4) (eq (slice .RedirectTo 0 4) "http") }}
     <p>
       Parolanı sıfırlamak için aşağıdaki bağlantıyı kullan. Bağlantı tek kullanımlıktır ve 1 saat
       geçerlidir.
@@ -13,9 +21,6 @@
         Parolamı sıfırla
       </a>
     </p>
-    <p style="color: #6b6b76">
-      Bu isteği sen yapmadıysan bu e-postayı yok sayabilirsin; parolan değişmez.
-    </p>
     <hr />
     <p>Use the link below to reset your password. It can be used once and expires in 1 hour.</p>
     <p>
@@ -25,8 +30,24 @@
         Reset my password
       </a>
     </p>
+    {{ else }}
+    <p>
+      Parolanı sıfırlamak için bu e-postayı, sıfırlamayı istediğin telefonda aç ve bağlantıya dokun
+      ya da uygulamaya şu kodu gir: <strong>{{ .Token }}</strong>. Bağlantı ve kod tek
+      kullanımlıktır ve 1 saat geçerlidir.
+    </p>
+    <p><a href="{{ .ConfirmationURL }}">Uygulamada parolamı sıfırla</a></p>
+    <hr />
+    <p>
+      Open this email on the phone where you requested the reset and tap the link, or enter this
+      code in the app: <strong>{{ .Token }}</strong>. The link and code can be used once and expire
+      in 1 hour.
+    </p>
+    <p><a href="{{ .ConfirmationURL }}">Reset my password in the app</a></p>
+    {{ end }}
     <p style="color: #6b6b76">
-      If you did not request this, you can ignore this email; your password stays the same.
+      Bu isteği sen yapmadıysan bu e-postayı yok sayabilirsin; parolan değişmez. · If you did not
+      request this, you can ignore this email; your password stays the same.
     </p>
   </body>
 </html>
