@@ -13,7 +13,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@bingetrail/db-types": "workspace:*"
+    "@bingetrail/db-types": "workspace:*",
+    "@bingetrail/i18n": "workspace:*"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.0.0"

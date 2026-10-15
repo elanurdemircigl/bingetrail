@@ -13,6 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@bingetrail/i18n": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

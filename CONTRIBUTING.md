@@ -8,13 +8,13 @@ Proje fazlar halinde ilerler ([plan.md](plan.md), [fazlar/](fazlar/README.md)). 
 
 Aynı dosyaya iki ajan paralel yazmaz. Her ajan yalnızca kendi alanına yazar. Başka bir alanda değişiklik gerekiyorsa bulguyu raporlar ve değişikliği o alanın sahibi yapar.
 
-| Ajan                                 | Yazabildiği yerler                                                                                                                                                                                                                                      |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **APP** (ana uygulama geliştiricisi) | `apps/**`, `packages/shared`, `packages/api-client`, `packages/i18n`, `packages/config`, kök config (`package.json`, `pnpm-workspace.yaml`, `turbo.json`, `.npmrc`, `.gitignore`, `.editorconfig`, prettier, `tsconfig.json`), yanındaki birim testleri |
-| **DB** (veritabanı ve Supabase)      | `supabase/**` (`tests/security` hariç), `packages/db-types`                                                                                                                                                                                             |
-| **SEC** (güvenlik)                   | `tooling/security/**`, `.gitleaks.toml`, `supabase/tests/security/**`, `docs/security/**`, `SECURITY.md`                                                                                                                                                |
-| **QA** (test ve kalite)              | `e2e/**`, `tests/integration/**`, `.github/workflows/**`, `playwright.config.ts`                                                                                                                                                                        |
-| **DOC** (dokümantasyon)              | `docs/**` (`docs/security` hariç), `README.md`, `CONTRIBUTING.md`                                                                                                                                                                                       |
+| Ajan                                 | Yazabildiği yerler                                                                                                                                                                                                                                                            |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **APP** (ana uygulama geliştiricisi) | `apps/**`, `packages/shared`, `packages/api-client`, `packages/i18n`, `packages/config`, kök config (`package.json`, `pnpm-workspace.yaml`, `turbo.json`, `.npmrc`, `.gitignore`, `.editorconfig`, prettier, `tsconfig.json`), `tooling/scripts/**`, yanındaki birim testleri |
+| **DB** (veritabanı ve Supabase)      | `supabase/**` (`tests/security` hariç), `packages/db-types`                                                                                                                                                                                                                   |
+| **SEC** (güvenlik)                   | `tooling/security/**`, `.gitleaks.toml`, `supabase/tests/security/**`, `docs/security/**`, `SECURITY.md`                                                                                                                                                                      |
+| **QA** (test ve kalite)              | `e2e/**`, `tests/integration/**`, `.github/workflows/**`, `playwright.config.ts`                                                                                                                                                                                              |
+| **DOC** (dokümantasyon)              | `docs/**` (`docs/security` hariç), `README.md`, `CONTRIBUTING.md`                                                                                                                                                                                                             |
 
 ## Kesin yasaklar
 
@@ -28,8 +28,10 @@ Aynı dosyaya iki ajan paralel yazmaz. Her ajan yalnızca kendi alanına yazar. 
 
 ```bash
 pnpm lint && pnpm typecheck && pnpm test
-pnpm run build:web && pnpm run security:check
-pnpm run test:security && pnpm run test:e2e
+pnpm db:start                     # yerel Supabase (Docker)
+pnpm build:web:local && pnpm security:check:local
+pnpm test:security && pnpm test:e2e
+pnpm db:test && pnpm db:advisors
 pnpm run format:check
 ```
 

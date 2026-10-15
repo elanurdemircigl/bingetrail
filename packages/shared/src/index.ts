@@ -1,1 +1,20 @@
 export { WATCH_STATUSES, watchStatusSchema, type WatchStatus } from './watch-status';
+export {
+  AUTH_ERROR_CODES,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  VALIDATION_CODES,
+  emailSchema,
+  forgotPasswordSchema,
+  localeSchema,
+  newPasswordSchema,
+  resetPasswordSchema,
+  signInSchema,
+  signUpSchema,
+  type AuthErrorCode,
+  type ForgotPasswordInput,
+  type ResetPasswordInput,
+  type SignInInput,
+  type SignUpInput,
+  type ValidationCode,
+} from './auth';

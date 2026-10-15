@@ -5,5 +5,120 @@
   },
   "home": {
     "comingSoon": "Coming soon: search, watchlist and episode tracking."
+  },
+  "languages": {
+    "label": "Language",
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "landing": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "openApp": "Open the app"
+  },
+  "nav": {
+    "mainNav": "Main navigation",
+    "home": "Home",
+    "search": "Search",
+    "list": "My list",
+    "calendar": "Calendar",
+    "profile": "Profile",
+    "signOut": "Sign out"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "forgot": "Forgot your password?",
+      "noAccount": "No account yet?",
+      "signUpLink": "Create one",
+      "confirmHint": "Just signed up? Click the confirmation link in your email first."
+    },
+    "signup": {
+      "title": "Create account",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters, with at least one letter and one digit.",
+      "confirmPassword": "Confirm password",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "description": "Enter your email; if you have an account we will send you a reset link.",
+      "email": "Email",
+      "submit": "Send link",
+      "submitting": "Sending…",
+      "backToLogin": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "password": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Save password",
+      "submitting": "Saving…"
+    },
+    "checkEmail": {
+      "title": "Check your email",
+      "signupBody": "If an account can be created for this address, we have sent a confirmation link. Click it to activate your account.",
+      "forgotBody": "If an account exists for this address, we have sent a password reset link. It is valid for 1 hour.",
+      "backToLogin": "Back to sign in"
+    },
+    "passwordUpdated": "Your password has been updated."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "passwordTooLong": "Password is too long.",
+    "passwordNeedsLetter": "Password must contain at least one letter.",
+    "passwordNeedsDigit": "Password must contain at least one digit.",
+    "passwordsDontMatch": "Passwords do not match."
+  },
+  "errors": {
+    "invalidCredentials": "Incorrect email or password.",
+    "weakPassword": "This password is not strong enough. Choose a longer, harder-to-guess password.",
+    "samePassword": "Your new password must be different from the old one.",
+    "reauthRequired": "For your security, sign in again and retry.",
+    "rateLimited": "Too many attempts. Please wait a moment and try again.",
+    "linkInvalid": "This link is invalid or has expired. Request a new one.",
+    "unexpected": "Something went wrong. Please try again."
+  },
+  "pages": {
+    "home": {
+      "title": "Home",
+      "welcome": "Welcome!",
+      "body": "Series you are watching will show up here."
+    },
+    "search": {
+      "title": "Search",
+      "body": "Movie and series search is coming soon."
+    },
+    "list": {
+      "title": "My list",
+      "body": "Your watchlist is coming soon."
+    },
+    "calendar": {
+      "title": "Calendar",
+      "body": "Upcoming episodes are coming soon."
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to the start page"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "language": "App language",
+    "languageHelp": "The interface opens in this language; your choice is saved across devices.",
+    "save": "Save",
+    "saving": "Saving…",
+    "signOut": "Sign out"
   }
 }

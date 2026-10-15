@@ -1,13 +1,14 @@
 # Tehdit Modeli
 
-> Sahibi: SEC · Sürüm: **v1 (Faz 1)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
+> Sahibi: SEC · Sürüm: **v2 (Faz 2)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
 
 ## Kapsam
 
 - **Faz 0:** Araç zinciri ve secret sızıntısı.
 - **Faz 1:** Veritabanı şeması, RLS, yetkiler, profil tetikleyicisi, avatar storage ve hesap silme veri modeli.
+- **Faz 2:** Web kimlik doğrulama (kayıt, giriş, çıkış, parola sıfırlama), oturum cookie'leri, proxy erişim kuralları, i18n. Ayrıntılar: [Faz 2 eki](#faz-2-eki-web-kimlik-doğrulama).
 
-Auth akışları Faz 2'de, Edge Function'lar Faz 3 ve 4'te kapsama girecek.
+Edge Function'lar Faz 3 ve 4'te kapsama girecek.
 
 ## Varlıklar
 
@@ -78,3 +79,26 @@ Auth akışları Faz 2'de, Edge Function'lar Faz 3 ve 4'te kapsama girecek.
 | Undeclared bağımlılık yaması                                            | `react-native-css-interop` için `packageExtensions` (yalnızca bir Babel eklentisi)                |
 | ESLint 9.x npm'de "deprecated" işaretli                                 | Kabul edildi; eslint-config-next ESLint 10'u desteklediğinde yükseltilecek (ADR-0001)             |
 | Yerel Supabase çıktısı yerel anahtarları ekrana yazıyor                 | Bu anahtarlar yalnızca yerel geliştirme içindir; ajanlar bu çıktıyı göstermez ve paylaşmaz        |
+
+## Faz 2 eki: web kimlik doğrulama
+
+| Tehdit                     | Örnek                                                   | Önlem                                                                                               | Kanıt                                   |
+| -------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **S**poofing               | XSS ile oturum token'ını çalmak                         | Cookie'ler `HttpOnly` + `SameSite=Lax` (+ prod `Secure`); tarayıcı tarafında Supabase client'ı yok  | E2E: cookie bayrakları kontrol ediliyor |
+| **S**poofing               | Sahte veya oynanmış doğrulama bağlantısı                | `/auth/confirm` sunucuda `verifyOtp` çalıştırır; geçersiz token `linkInvalid` sayfasına düşer       | E2E: sahte `token_hash` reddediliyor    |
+| **S**poofing               | Oturumu sunucuda yanlış doğrulamak                      | `getClaims()` (JWT doğrulama); `getSession()` hiçbir yerde kullanılmıyor                            | Kod incelemesi                          |
+| **T**ampering              | Server Action'a doğrudan, form dışından istek göndermek | Her action girdiyi Zod ile yeniden doğrular; Next.js origin (CSRF) kontrolü                         | Birim + E2E                             |
+| **I**nformation disclosure | Hesap varlığını öğrenmek (enumeration)                  | Giriş, kayıt ve parola sıfırlamada aynı yanıtlar; `toAuthErrorCode` hesabı ele veren kodları gizler | Birim + 3 E2E testi                     |
+| **I**nformation disclosure | Açık yönlendirme ile oltalama (`?next=//evil`)          | `safeRedirectPath` yalnızca aynı origin'deki göreli yolları kabul eder                              | 13 birim testi + E2E                    |
+| **I**nformation disclosure | Oturum içeren yanıtın CDN'de önbelleğe alınması         | `@supabase/ssr`'ın cache başlıkları proxy yanıtına uygulanır                                        | Kod incelemesi                          |
+| **E**levation of privilege | Oturum olmadan korumalı sayfaya erişim                  | Proxy kuralı + korumalı layout'ta ikinci kontrol                                                    | E2E                                     |
+| **E**levation of privilege | Kurtarma oturumu olmadan parola değiştirmek             | `/reset-password` oturum ister; `secure_password_change = true`                                     | E2E                                     |
+| **D**enial of service      | Kaba kuvvet ile parola denemek                          | Supabase Auth hız sınırları (`[auth.rate_limit]`); `rateLimited` mesajı                             | Yapılandırma                            |
+
+### Kabul edilen riskler (Faz 2)
+
+| Risk                                                                         | Gerekçe                                                                                                                                  |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Proxy'de yenilenen token, aynı istekteki Server Component'lere ulaşmayabilir | next-intl yanıtı yeniden oluşturulamadığı için bilinen bir sınırlama. `refresh_token_reuse_interval = 10` sn çift yenilemeyi tolere eder |
+| Content-Security-Policy henüz yok                                            | Bütün origin'ler (Supabase, TMDB görselleri, hosting) Faz 10'da kesinleşince eklenecek                                                   |
+| Sızmış parola kontrolü (HIBP) yerelde yok                                    | Barındırılan Supabase'te panelden açılır ([docs/auth.md](../auth.md))                                                                    |

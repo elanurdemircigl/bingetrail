@@ -1,6 +1,10 @@
 import type { NextConfig } from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
 
-// Baseline security headers. A full CSP is added once Supabase origins are known (Faz 2/10).
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+// Baseline security headers. A full CSP is added in Faz 10, once every origin
+// (Supabase, TMDB images, hosting) is final.
 const securityHeaders = [
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -10,7 +14,12 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  transpilePackages: ['@bingetrail/i18n'],
+  transpilePackages: [
+    '@bingetrail/api-client',
+    '@bingetrail/db-types',
+    '@bingetrail/i18n',
+    '@bingetrail/shared',
+  ],
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'image.tmdb.org', pathname: '/t/p/**' }],
   },
@@ -19,4 +28,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

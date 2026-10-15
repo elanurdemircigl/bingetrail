@@ -1,12 +1,13 @@
 # Mimari
 
-> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 0.
+> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 2.
 
 ## Bileşenler
 
 ```
 apps/web (Next.js)        apps/mobile (Expo)
-   │ @supabase/ssr            │ supabase-js + SecureStore      ← Faz 2 / Faz 6
+   │ @supabase/ssr (sunucu)   │ supabase-js + SecureStore      ← Faz 2 ✅ / Faz 6
+   │ HttpOnly cookie, proxy   │
    │                          │
    └──────┬───────────────────┘
           │ ortak sözleşmeler
@@ -23,23 +24,25 @@ Supabase: PostgreSQL + RLS · Auth · Storage · Realtime · Edge Functions (tmd
 
 ## Bağımlılık kuralları
 
-| Paket              | Bağımlı olabileceği                                              | Bağımlı olamayacağı                |
-| ------------------ | ---------------------------------------------------------------- | ---------------------------------- |
-| `shared`           | `zod`                                                            | React, Next, Expo, Supabase        |
-| `api-client`       | `db-types`, `@supabase/supabase-js` (yalnızca peer, tipler için) | React, Next, Expo, `@supabase/ssr` |
-| `i18n`, `db-types` | —                                                                | React, Next, Expo                  |
-| `apps/web`         | Bütün paketler, Next, `@supabase/ssr`                            | Expo, React Native                 |
-| `apps/mobile`      | Bütün paketler, Expo                                             | Next, `@supabase/ssr`              |
+| Paket              | Bağımlı olabileceği                                         | Bağımlı olamayacağı                |
+| ------------------ | ----------------------------------------------------------- | ---------------------------------- |
+| `shared`           | `zod`, `i18n` (yalnızca dil listesi)                        | React, Next, Expo, Supabase        |
+| `api-client`       | `db-types`, `i18n`, `@supabase/supabase-js` (yalnızca peer) | React, Next, Expo, `@supabase/ssr` |
+| `i18n`, `db-types` | —                                                           | React, Next, Expo                  |
+| `apps/web`         | Bütün paketler, Next, `@supabase/ssr`                       | Expo, React Native                 |
+| `apps/mobile`      | Bütün paketler, Expo                                        | Next, `@supabase/ssr`              |
 
 Paylaşılan paketlerdeki yasaklar ESLint (`no-restricted-imports`) ile zorunlu tutulur.
 
-## Güncel durum (Faz 1)
+## Güncel durum (Faz 2)
 
-| Bileşen            | Durum                                                                                                                    |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/web`         | `/` sayfası (TR), temel güvenlik header'ları, TMDB görsel izni                                                           |
-| `apps/mobile`      | Tek ekranlı Expo Router iskeleti, NativeWind                                                                             |
-| `packages/*`       | İskeletler ve smoke testleri                                                                                             |
-| `supabase/`        | Faz 1: şema, RLS, hesap silme modeli, avatars bucket, pgTAP ([veri modeli](data-model.md))                               |
-| `tooling/security` | bundle-guard, public-env-check                                                                                           |
-| CI                 | lint · typecheck · test · web build · güvenlik taraması · E2E smoke · gitleaks · veritabanı (pgTAP, advisors, tip uyumu) |
+| Bileşen               | Durum                                                                                                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web`            | next-intl (`/tr`, `/en`), auth akışları (Server Actions + `/auth/confirm`), `proxy.ts` erişim kuralları, uygulama kabuğu ([auth](auth.md), [ADR-0002](adr/0002-web-auth.md)) |
+| `apps/mobile`         | Tek ekranlı Expo Router iskeleti, NativeWind (özellikler Faz 6)                                                                                                              |
+| `packages/shared`     | Auth Zod şemaları, doğrulama ve hata kodları                                                                                                                                 |
+| `packages/api-client` | `queryKeys`, `ProfileDTO`, `getProfile`, `updateProfileLocale`                                                                                                               |
+| `packages/i18n`       | TR/EN mesajları (auth, nav, doğrulama, hatalar, profil)                                                                                                                      |
+| `supabase/`           | Şema, RLS, hesap silme modeli, avatars bucket, pgTAP ([veri modeli](data-model.md)); auth ayarları ve TR/EN e-posta şablonları                                               |
+| `tooling/`            | `security/`: bundle-guard, public-env-check · `scripts/`: yerel Supabase public env aktarıcı                                                                                 |
+| CI                    | quality (lint · typecheck · birim) · e2e (web build · güvenlik taraması · Playwright, yerel Supabase ile) · database (pgTAP · advisors · tip uyumu) · gitleaks               |

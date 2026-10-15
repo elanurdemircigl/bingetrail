@@ -12,10 +12,19 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@bingetrail/api-client": "workspace:*",
+    "@bingetrail/db-types": "workspace:*",
     "@bingetrail/i18n": "workspace:*",
+    "@bingetrail/shared": "workspace:*",
+    "@hookform/resolvers": "^5.9.1",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "catalog:",
     "next": "16.4.0",
+    "next-intl": "^4.14.9",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.90.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@bingetrail/config": "workspace:*",
