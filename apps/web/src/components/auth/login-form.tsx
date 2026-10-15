@@ -33,7 +33,7 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
   const shownError = error ?? initialError;
 
   return (
-    <form noValidate onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
+    <form method="post" noValidate onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
       {shownError && <FormAlert>{te(shownError)}</FormAlert>}
       <FormField
         label={t('email')}

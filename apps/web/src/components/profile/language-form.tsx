@@ -21,6 +21,7 @@ export function LanguageForm({ current }: { current: Locale }) {
 
   return (
     <form
+      method="post"
       onSubmit={(event) => {
         event.preventDefault();
         submit(locale);

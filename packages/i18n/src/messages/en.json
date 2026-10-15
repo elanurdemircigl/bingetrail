@@ -118,7 +118,6 @@
     "language": "App language",
     "languageHelp": "The interface opens in this language; your choice is saved across devices.",
     "save": "Save",
-    "saving": "Saving…",
-    "signOut": "Sign out"
+    "saving": "Saving…"
   }
 }

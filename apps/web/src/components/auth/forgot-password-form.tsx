@@ -32,7 +32,7 @@ export function ForgotPasswordForm() {
   );
 
   return (
-    <form noValidate onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
+    <form method="post" noValidate onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
       <p className="text-ink-muted text-sm">{t('description')}</p>
       {error && <FormAlert>{te(error)}</FormAlert>}
       <FormField

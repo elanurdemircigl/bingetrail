@@ -83,6 +83,11 @@ describe('LoginForm', () => {
     expect((await screen.findByRole('alert')).textContent).toBe(tr.errors.invalidCredentials);
   });
 
+  it('uses POST so a pre-hydration submit can never put the password in the URL', () => {
+    const { container } = renderTr(<LoginForm />);
+    expect(container.querySelector('form')?.getAttribute('method')).toBe('post');
+  });
+
   it('shows the invalid-link message passed by the confirm route', () => {
     renderTr(<LoginForm initialError="linkInvalid" />);
     expect(screen.getByRole('alert').textContent).toBe(tr.errors.linkInvalid);

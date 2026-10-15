@@ -36,7 +36,7 @@ export function ResetPasswordForm() {
   const fieldError = (code?: string) => (code ? tv(code as ValidationCode) : undefined);
 
   return (
-    <form noValidate onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
+    <form method="post" noValidate onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
       {error && <FormAlert>{te(error)}</FormAlert>}
       <FormField
         label={t('password')}

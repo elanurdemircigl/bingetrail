@@ -14,6 +14,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Stop `next dev` from writing an AGENTS.md into the repository.
+  agentRules: false,
+  // Dev mode logs Server Action arguments by default — that would print
+  // plaintext passwords from the auth forms to the terminal.
+  logging: { serverFunctions: false },
   transpilePackages: [
     '@bingetrail/api-client',
     '@bingetrail/db-types',

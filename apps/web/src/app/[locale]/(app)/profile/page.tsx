@@ -4,7 +4,6 @@ import { getTranslations } from 'next-intl/server';
 import { getProfile } from '@bingetrail/api-client';
 
 import { LanguageForm } from '@/components/profile/language-form';
-import { SignOutButton } from '@/components/sign-out-button';
 import { redirect } from '@/i18n/navigation';
 import { resolveLocale } from '@/i18n/page';
 import { getSessionUser } from '@/lib/auth/session';
@@ -35,9 +34,6 @@ export default async function ProfilePage({ params }: PageProps<'/[locale]/profi
           <dd data-testid="profile-email">{user.email}</dd>
         </dl>
         <LanguageForm current={profile?.locale ?? locale} />
-        <div>
-          <SignOutButton label={t('signOut')} />
-        </div>
       </section>
     </>
   );

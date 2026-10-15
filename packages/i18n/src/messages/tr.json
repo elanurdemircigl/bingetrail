@@ -118,7 +118,6 @@
     "language": "Uygulama dili",
     "languageHelp": "Arayüz bu dilde açılır; tercihin tüm cihazlarında saklanır.",
     "save": "Kaydet",
-    "saving": "Kaydediliyor…",
-    "signOut": "Çıkış yap"
+    "saving": "Kaydediliyor…"
   }
 }
