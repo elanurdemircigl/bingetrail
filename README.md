@@ -2,7 +2,7 @@
 
 Film ve dizi takip uygulaması: web (Next.js) ve mobil (Expo), Supabase backend.
 
-> **Durum: Faz 6 — Mobil çekirdek.** Expo uygulaması web ile aynı akışları sunuyor: hesap, arama, liste, bölüm takibi, İzlemeye devam et, hesap silme, TR/EN ([docs/mobile.md](docs/mobile.md)). Faz 5: Bölüm/sezon/"buraya kadar" işaretleme, ilerleme çubukları, tamamlama önerisi ve ana sayfada "İzlemeye devam et" eklendi. Öncesi: Web'de kimlik doğrulama, TR/EN, film/dizi arama ve detay (`tmdb` Edge Function, önbellekli), izleme listesi (5 durum, 1–10 puan, kişisel notlar, filtre ve sıralama) ve kalıcı hesap silme (`delete-account` Edge Function) çalışıyor. Kullanım: [docs/user-guide.md](docs/user-guide.md)
+> **Durum: Faz 7 — Cihazlar arası senkronizasyon.** Web ve mobil değişiklikleri birbirine 2 saniye içinde yansıtıyor; mobil çevrimdışı çalışıyor ([docs/sync.md](docs/sync.md)). Faz 6: Expo uygulaması web ile aynı akışları sunuyor ([docs/mobile.md](docs/mobile.md)). Kullanım: [docs/user-guide.md](docs/user-guide.md)
 > Yol haritası: [plan.md](plan.md) · Faz dizini: [fazlar/](fazlar/README.md)
 
 ## Gereksinimler

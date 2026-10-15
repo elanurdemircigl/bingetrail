@@ -65,3 +65,13 @@ Cihaz / OS: ____________ · Expo Go sürümü: ________ · Tarih: ________ · Ko
 
 - [ ] TalkBack/VoiceOver ile giriş formu, sekmeler ve bölüm kutuları okunuyor
 - [ ] Büyük yazı tipi ayarında metinler kesilmiyor
+
+## Senkronizasyon ve çevrimdışı (Faz 7)
+
+- [ ] Profil'de durum "Canlı"
+- [ ] Web'de aynı hesapla Listem açıkken telefonda başlık ekle → web 2 sn içinde güncelleniyor (sayfa yenilemeden)
+- [ ] Web'de bölüm işaretle → telefonda ana sayfa güncelleniyor
+- [ ] Uçak modu: üstte "Çevrimdışısın…" bandı; 3 değişiklik yap → "3 değişiklik … gönderilecek"
+- [ ] Uçak modundayken uygulamayı tamamen kapat, aç → değişiklikler ekranda duruyor
+- [ ] Uçak modunu kapat → bant kayboluyor, değişiklikler web'de görünüyor
+- [ ] Çıkış yap, başka hesapla gir → önceki hesabın verisi görünmüyor

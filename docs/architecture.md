@@ -1,6 +1,6 @@
 # Mimari
 
-> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 6.
+> Kaynak: [plan.md](../plan.md) §1. Bu doküman uygulandıkça güncellenir. Durum: Faz 7.
 
 ## Bileşenler
 
@@ -34,7 +34,9 @@ Supabase: PostgreSQL + RLS · Auth · Storage · Realtime · Edge Functions (tmd
 
 Paylaşılan paketlerdeki yasaklar ESLint (`no-restricted-imports`) ile zorunlu tutulur.
 
-## Güncel durum (Faz 6)
+## Güncel durum (Faz 7)
+
+Senkronizasyon: [sync.md](sync.md) (veritabanı sinyali → web `router.refresh()`, mobil sorgu yenileme; mobil çevrimdışı kuyruk).
 
 | Bileşen               | Durum                                                                                                                                                                                                                                                                                                                                                                                                            |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

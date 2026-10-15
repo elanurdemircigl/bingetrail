@@ -69,6 +69,7 @@ test('add, rate, annotate, filter, sort and remove', async ({ page }) => {
   await expect(page.getByTestId('list-tab-planned')).toHaveAttribute('aria-current', 'page');
 
   await page.getByTestId('list-tab-all').click();
+  await expect(page).toHaveURL(/\/tr\/list$/);
   await page.getByLabel(tr.list.sortLabel).selectOption('title');
   await page.getByRole('button', { name: tr.list.apply }).click();
   await expect(page).toHaveURL(/\/tr\/list\?sort=title$/);

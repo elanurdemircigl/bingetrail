@@ -28,6 +28,7 @@ import {
   Screen,
   Title,
 } from '@/components/ui';
+import { SyncStatus } from '@/components/sync-banner';
 import { StatusChips } from '@/components/watchlist-controls';
 import { signOut } from '@/lib/auth/actions';
 import { useSession } from '@/lib/auth/session';
@@ -296,6 +297,7 @@ export function ProfileScreen() {
   return (
     <Screen>
       <Title>{t('profile.title')}</Title>
+      <SyncStatus />
       <View className="gap-1 rounded-card bg-surface-raised p-4">
         <Muted>{t('profile.email')}</Muted>
         <Text testID="profile-email" className="text-ink">

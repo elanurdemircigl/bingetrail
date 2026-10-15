@@ -22,6 +22,7 @@
 | Oturum deposu   | `src/lib/supabase/large-secure-store.ts` | Her yazımda yeni AES-256 anahtarı → SecureStore (`WHEN_UNLOCKED_THIS_DEVICE_ONLY`, yedeğe girmez); şifreli oturum → AsyncStorage   |
 | Oturum durumu   | `src/lib/auth/session.tsx`               | Giriş/çıkışta önbellek temizlenir; profil dili uygulanır                                                                           |
 | Auth işlemleri  | `src/lib/auth/actions.ts`                | Web Server Action'larıyla aynı Zod şemaları ve hata kodları (`toAuthErrorCode` artık `packages/shared`'da)                         |
+| Senkron         | `src/lib/sync/*`                         | Canlı sinyal, çevrimdışı kuyruk (şifreli kalıcı), sunucu saati; bkz. [sync.md](sync.md)                                            |
 | Veri            | `src/lib/queries.ts`                     | TanStack Query; `@bingetrail/api-client` fonksiyonları ve `queryKeys` **değişmeden** kullanılır; durum ve bölüm işaretleme iyimser |
 | i18n            | `src/lib/i18n.ts`                        | i18next + ICU eklentisi, `packages/i18n` JSON'ları (K12); anahtarlar tip kontrollü                                                 |
 | Ekranlar        | `src/screens/*`, `app/*`                 | Expo Router: `(auth)` misafir, `(app)` oturumlu, `(app)/(tabs)` sekmeler                                                           |

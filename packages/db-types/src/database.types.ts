@@ -192,11 +192,17 @@ isOneToOne: false
 "mark_episodes_watched":
 { Args: { "p_episode_ids": (number)[] }; Returns: number
                            },
+"my_realtime_topic":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
 "purge_rate_limits":
 { Args: { "p_older_than"?: string }; Returns: number
                            },
 "rate_limit_hit":
 { Args: { "p_bucket": string,"p_max_requests": number,"p_user_id": string,"p_window_seconds": number }; Returns: boolean
+                           },
+"server_now":
+{ Args: Record<PropertyKey, never>; Returns: string
                            },
 "unmark_episodes":
 { Args: { "p_episode_ids": (number)[] }; Returns: number

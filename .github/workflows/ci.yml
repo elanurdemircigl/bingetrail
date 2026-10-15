@@ -72,14 +72,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Auth, REST, Storage (avatar removal on account deletion), gateway, mail
+      # Auth, REST, Storage (avatar removal), Realtime (cross-device sync), gateway, mail
       # catcher and the edge runtime are what E2E needs. The functions are served
       # by Playwright with a TMDB mock and a throwaway deletion salt
       # (e2e/tmdb-mock/start-services.mjs) — no real secrets in CI.
       - name: Start local Supabase
         run: >-
           pnpm exec supabase start
-          -x studio,imgproxy,realtime,logflare,vector,supavisor,postgres-meta
+          -x studio,imgproxy,logflare,vector,supavisor,postgres-meta
           > /dev/null
 
       # Public URL + publishable key come from the local stack via the wrapper;
@@ -98,7 +98,7 @@ jobs:
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: E2E (auth, access control, i18n, catalog, watchlist, episode tracking, account deletion)
+      - name: E2E (auth, access control, i18n, catalog, watchlist, episodes, sync, account deletion)
         run: pnpm run test:e2e
 
       - name: Upload Playwright report

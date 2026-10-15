@@ -1,16 +1,22 @@
 import { getTranslations } from 'next-intl/server';
 
+import { getRealtimeTopic } from '@bingetrail/api-client';
+
 import { AppNav } from '@/components/app-nav';
+import { LiveSync } from '@/components/live-sync';
 import { SignOutButton } from '@/components/sign-out-button';
 import { Link, redirect } from '@/i18n/navigation';
 import { resolveLocale } from '@/i18n/page';
 import { getSessionUser } from '@/lib/auth/session';
+import { createClient } from '@/lib/supabase/server';
 
 /** Shell for signed-in pages. Re-checks the session even though the proxy already did. */
 export default async function AppLayout({ children, params }: LayoutProps<'/[locale]'>) {
   const locale = await resolveLocale(params);
   if (!(await getSessionUser())) redirect({ href: '/login', locale });
   const t = await getTranslations();
+  // Per-user sync topic (no token reaches the browser; see LiveSync).
+  const topic = await getRealtimeTopic(await createClient());
 
   return (
     <div className="min-h-screen">
@@ -20,7 +26,10 @@ export default async function AppLayout({ children, params }: LayoutProps<'/[loc
             {t('app.name')}
           </Link>
           <AppNav />
-          <SignOutButton label={t('nav.signOut')} />
+          <div className="flex items-center gap-3">
+            <LiveSync topic={topic} />
+            <SignOutButton label={t('nav.signOut')} />
+          </div>
         </div>
       </header>
       <main className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-8">{children}</main>

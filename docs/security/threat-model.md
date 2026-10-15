@@ -1,6 +1,6 @@
 # Tehdit Modeli
 
-> Sahibi: SEC · Sürüm: **v6 (Faz 6)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
+> Sahibi: SEC · Sürüm: **v7 (Faz 7)** · Yöntem: STRIDE · Her fazın sonunda güncellenir.
 
 ## Kapsam
 
@@ -180,3 +180,15 @@
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `aes-js` 3.1.2 eski bir paket           | Küçük, bağımlılıksız, Supabase'in Expo rehberinde önerilen; yalnızca CTR + yardımcılar kullanılıyor. Faz 10'da `expo-crypto` AES API'si olgunlaşırsa değiştirilecek |
 | Expo Go'da sıfırlama bağlantısı açılmaz | Kod yolu var; standalone build'de bağlantı çalışır                                                                                                                  |
+
+## Faz 7 eki: senkronizasyon (v7)
+
+| Tehdit                     | Örnek                                                | Önlem                                                                                                           | Kanıt                                     |
+| -------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **I**nformation disclosure | Başka kullanıcının değişiklik sinyallerini dinlemek  | Konu = HMAC(uid, veritabanı gizli anahtarı); istemci yalnızca kendi konusunu alabilir; anahtar ve üreteç kapalı | pgTAP `realtime_sync` + E2E (Bob almıyor) |
+| **I**nformation disclosure | Sinyalden kişisel veri sızması                       | Sinyal yalnızca `{ table, titleIds }`; veri her zaman oturum + RLS ile okunur                                   | pgTAP (payload denetimi)                  |
+| **S**poofing               | Tarayıcıda token çalmak için Realtime'ı bahane etmek | Web'de Realtime istemcisi publishable key ile, oturumsuz; HttpOnly cookie korunuyor                             | E2E (cookie ve storage'da JWT yok)        |
+| **T**ampering              | Sahte sinyal göndermek (konu bilinirse)              | Sinyal yalnızca yenileme tetikler; içerik doğrulanır (Zod), veri sunucudan okunur                               | Vitest (geçersiz payload yok sayılır)     |
+| **I**nformation disclosure | Telefondaki kalıcı önbellekten not/puan okumak       | Önbellek ve kuyruk oturumla aynı şekilde şifreli; çıkışta ve hesap değişiminde silinir                          | jest + kod incelemesi                     |
+| **T**ampering              | Saati yanlış cihazın tutarsız tarih yazması          | Mobil tarihleri sunucu saatine göre yazar (`server_now()`); `updated_at` her zaman sunucu `now()`               | Vitest (saat farkı)                       |
+| **D**enial of service      | Toplu işlemle sinyal seli                            | İfade düzeyinde tetikleyici: işlem başına kullanıcı başına bir sinyal; istemcide 150 ms birleştirme             | pgTAP (3 bölüm → 1 sinyal)                |

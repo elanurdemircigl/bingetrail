@@ -143,7 +143,7 @@ function RemoveButton({ item, title }: { item: WatchlistItemDTO; title: string }
         label={t('watchlist.removeYes')}
         pendingLabel={t('watchlist.removing')}
         pending={remove.isPending}
-        onPress={() => remove.mutate(item.id)}
+        onPress={() => remove.mutate({ itemId: item.id })}
       />
       <Button
         tone="secondary"

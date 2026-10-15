@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@playwright/test": "catalog:",
+    "@supabase/supabase-js": "catalog:",
     "@types/node": "catalog:",
     "prettier": "3.9.10",
     "supabase": "2.121.0",

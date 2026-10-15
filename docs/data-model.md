@@ -77,6 +77,18 @@ Migration `20261016090000_episode_progress.sql` ([ADR-0005](adr/0005-episode-pro
 | `episode_progress_guard` (tetikleyici) | Yayınlanmamış bölümün her yoldan işaretlenmesini engeller; gelecekteki `watched_at`'i şimdiye çeker | Bütün yazıcılar          |
 | `episodes_title_order_idx`             | `(title_id, season_number, episode_number) include (air_date)`: sıradaki bölüm ve sayımlar          | —                        |
 
+## Faz 7 eklemeleri
+
+Migration `20261017090000_realtime_sync.sql` ([sync.md](sync.md), [ADR-0007](adr/0007-sync.md)):
+
+| Nesne                                         | Amaç                                                                                | Erişim                   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------ |
+| `private` şeması, `private.realtime_secret`   | Sinyal konuları için rastgele gizli anahtar                                         | İstemci rollerine kapalı |
+| `private.realtime_topic(uid)`                 | `user:` + HMAC-SHA256                                                               | Yalnızca sahip (DEFINER) |
+| `my_realtime_topic()`                         | Çağıranın kendi konusu                                                              | `authenticated`          |
+| `private.notify_user_changes` + 5 tetikleyici | `watchlist_items` / `episode_progress` değişince ifade başına bir `changed` sinyali | Tetikleyici              |
+| `server_now()`                                | Mobil saat farkı ölçümü                                                             | `authenticated`          |
+
 ## Önemli tasarım kararları
 
 - **Bütünlük için birleşik FK'ler:** `episodes (season_id, title_id) → seasons (id, title_id)` ve `episode_progress (episode_id, title_id) → episodes (id, title_id)`. Böylece bir bölüm ile bağlı olduğu başlık birbiriyle çelişemez.

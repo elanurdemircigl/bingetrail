@@ -296,5 +296,13 @@
     "movie": "Movie",
     "seasonsLink": "Seasons",
     "progress": "{watched}/{aired} episodes"
+  },
+  "sync": {
+    "label": "Sync status",
+    "live": "Live",
+    "connecting": "Connecting…",
+    "offline": "Offline",
+    "pending": "{count, plural, one {# change will be sent when you are back online.} other {# changes will be sent when you are back online.}}",
+    "offlineBanner": "You are offline. Your changes are saved and will be sent when the connection is back."
   }
 }

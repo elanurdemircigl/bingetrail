@@ -36,3 +36,9 @@ export {
   type ContinueWatchingDTO,
   type TitleProgressDTO,
 } from './progress';
+export {
+  getRealtimeTopic,
+  measureClockOffset,
+  parseSyncEvent,
+  queryKeysForSyncEvent,
+} from './sync';

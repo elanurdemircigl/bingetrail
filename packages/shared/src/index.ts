@@ -57,3 +57,11 @@ export {
   type ProgressErrorCode,
 } from './progress';
 export { toAuthErrorCode } from './auth-errors';
+export {
+  SYNC_EVENT,
+  clockOffset,
+  realtimeTopicSchema,
+  syncEventSchema,
+  toServerTime,
+  type SyncEvent,
+} from './sync';

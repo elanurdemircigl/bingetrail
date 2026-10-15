@@ -296,5 +296,13 @@
     "movie": "Film",
     "seasonsLink": "Sezonlar",
     "progress": "{watched}/{aired} bölüm"
+  },
+  "sync": {
+    "label": "Senkronizasyon durumu",
+    "live": "Canlı",
+    "connecting": "Bağlanıyor…",
+    "offline": "Çevrimdışı",
+    "pending": "{count, plural, one {# değişiklik bağlantı gelince gönderilecek.} other {# değişiklik bağlantı gelince gönderilecek.}}",
+    "offlineBanner": "Çevrimdışısın. Yaptığın değişiklikler kaydedildi ve bağlantı gelince gönderilecek."
   }
 }
